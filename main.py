@@ -15,4 +15,4 @@ Menu:
 print(welcome_message)
 
 # User input for menu selection
-user_choice = int(input("Select a menu option: "))
+user_choice = int(input("Choose a menu option: "))
