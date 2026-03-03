@@ -1,5 +1,7 @@
 # Run the program here, this will be the main of the program
 
+from src import auth
+
 # Welcome message to welcome user
 welcome_message = f"""
 {'-' * 50}
@@ -16,3 +18,7 @@ print(welcome_message)
 
 # User input for menu selection
 user_choice = int(input("Choose a menu option: "))
+
+match user_choice:
+    case 2:
+        auth.register_user()
