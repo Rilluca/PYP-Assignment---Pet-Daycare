@@ -2,6 +2,8 @@
 
 # Import other Python files
 import auth
+import pet_owner
+from pet_owner import pet_owner_menu
 
 # Welcome message to welcome user
 welcome_message = f"""
@@ -14,13 +16,16 @@ Please log in to continue.
 # Print the welcome message
 print(welcome_message)
 
-# Create a login loop for authorization, if username and password are wrong,
-# User can try again without running the program again
+# Create a login loop for authorization
+# If username and password are wrong, user can try again without running the program again
 while True:
-    # Call the login() function and store the result as result
+    # Call the login() function and store the result of login as result
     result = auth.login()
 
-    # If credentials match, *break the program*
-    if result == True:
-        break
+    # If result return "admin", print admin menu
+    if result == "admin":
+        print("abc")
 
+    # If result return "user", print user menu
+    if result == "user":
+        pet_owner_menu()

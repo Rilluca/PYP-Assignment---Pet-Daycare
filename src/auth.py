@@ -3,7 +3,7 @@
 # Import function from other Python files
 from data_manage import save_user_register
 
-# Credentials for admin login
+# Hardcoded credentials for admin login
 admin_username = "admin13579"
 admin_password = "1234"
 
@@ -17,7 +17,7 @@ def login():
         # Verify login credentials for admin
         if username == admin_username and password == admin_password:
             print("Welcome admin, select your role for today.")
-            return True # Break when true
+            return "admin" # Return for admin menu
 
         # Open users.txt in read mode
         with open("users.txt", "r") as file:
@@ -31,11 +31,10 @@ def login():
                 # If user input equals to credentials
                 if username == credentials[0] and password == credentials[1]:
                     print("Login successful!")
-                    return True
+                    return "user" # Return for user menu
 
         # Error result if username and password don't match
         print("Wrong username or password, please try again.\n")
-        return False
 
     # Error exception
     except Exception as e:
