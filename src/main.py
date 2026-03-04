@@ -19,5 +19,8 @@ print(welcome_message)
 user_choice = int(input("Choose a menu option: "))
 
 match user_choice:
+    case 1:
+        pass
+
     case 2:
         auth.register_user()
