@@ -1,16 +1,15 @@
 # Run the program here, this will be the main of the program
 
-from src import auth
+import auth
 
 # Welcome message to welcome user
 welcome_message = f"""
 {'-' * 50}
 Welcome to Paws & Play Hub management system!
 {'-' * 50}
-Menu: 
+Select your role: 
 1. Pet Owner Login
-2. Pet Owner Register
-3. Staff Login
+2. Staff Login
 """
 
 #Print the welcome message
