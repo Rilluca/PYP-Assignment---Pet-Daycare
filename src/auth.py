@@ -4,8 +4,8 @@
 from data_manage import save_user_register
 
 # Hardcoded credentials for admin login
-admin_username = "admin13579"
-admin_password = "1234"
+admin_username = "admin"
+admin_password = "123"
 
 # Function to verify and authorize login
 def login():
@@ -16,8 +16,7 @@ def login():
 
         # Verify login credentials for admin
         if username == admin_username and password == admin_password:
-            print("Welcome admin, select your role for today.")
-            return "admin" # Return for admin menu
+            return "admin" # Return to result for admin menu
 
         # Open users.txt in read mode
         with open("users.txt", "r") as file:
@@ -31,11 +30,11 @@ def login():
                 # If user input equals to credentials
                 if username == credentials[0] and password == credentials[1]:
                     print("Login successful!")
-                    return "user" # Return for user menu
+                    return "user" # Return to result for user menu
 
         # Error result if username and password don't match
         print("Wrong username or password, please try again.\n")
 
     # Error exception
     except Exception as e:
-        print("Error:", e)
+        print(f"Error: {e}. Please contact admin.")
