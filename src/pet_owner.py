@@ -54,7 +54,7 @@ def request_Booking():
             f.write(record)
             print("Booking record submitted")
     except Exception as e:
-        print("Cannot submit booking")
+        print("Cannot submit booking", e)
 
 def request_Extension():
     name = input("Please enter your name:")
