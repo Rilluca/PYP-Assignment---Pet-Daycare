@@ -68,8 +68,7 @@ def show_admin_menu():
                     break
 
                 case 3:
-                    print("replace function to grooming/daycare staff here")
-                    break
+                    pet_owner.pet_owner_menu()
 
                 case 4:
                      print("replace function to facility assistant here")
@@ -79,8 +78,8 @@ def show_admin_menu():
                     print("Exiting program now")
                     break
 
-                case _:
-                    print("Input can only be in number and within range, please try again.\n")
+        except Exception:
+            print("Invalid choice, please try again.")
 
 
 # Call main menu

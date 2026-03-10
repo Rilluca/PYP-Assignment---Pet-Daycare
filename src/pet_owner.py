@@ -11,7 +11,6 @@ def grooming_slots():
         with open('slots.txt', 'r') as f:
         #with statement automatically closes the file unlike file
             print("Available slots")
-
             #looping through the file one by one
             for line in f:
                 #create an empty string to store the line
@@ -21,8 +20,8 @@ def grooming_slots():
                     #if character is not in new line, add it to the empty string
                     if c!= "\n":
                         text += c
-                #split the line using space as a seperator
-                parts = text.split(" ")
+                #split the line using comma as a seperator
+                parts = text.split(",")
 
                 #storeing the variable service into index no 0
                 service = parts[0]
@@ -52,7 +51,7 @@ def automatic_booking_id():
         count = 0
 
     num = str(count + 1)
-    while len(num) < 10:
+    while len(num) < 6:
         num = "0" + num
 
     booking_id = "BK" + num
@@ -105,18 +104,84 @@ def cancel_booking():
     except Exception as e:
         print("Booking cancelled failed", e)
 
-def view_service_history():
-    pet_id = input("Please enter your pet_id:")
+def reschedule_booking():
+    booking_id =input("Please enter your Booking ID to reschedule:")
+    new_date = input("Please enter your new date (DD-MM-YYYY):")
+
+    Result = False
+    updated_booking = ""
+
     try:
-        with open("service_history.txt", "r") as f:
+        with open("booking.txt", "r") as f:
+            new_text = ""
             line = f.readline()
-            print("Service History")
+            Result = False
             while line != "":
-                if pet_id in line:
-                    print(line)
+                parts = line.strip().split(",")
+                if parts[0] == booking_id:
+                    parts[2] = new_date
+                    Result = True
+                    line = ",".join(parts) + "\n"
+                new_text += line
                 line = f.readline()
+        with open("booking.txt", "w") as f:
+            f.write(new_text)
+        if Result == True:
+            print("Booking rescheduled successfully")
+        else:
+            print("Booking rescheduled failed")
     except Exception as e:
-        print("Service file not found", e)
+        print("Error: Rescheduling failed!")
+
+def view_service_history():
+        pet_id = input("Please enter your pet_id: ").strip()
+        Result = False
+
+        try:
+            with open("service_history.txt", "r") as f:
+                print(f"\n--- Service History for {pet_id} ---")
+                for line in f:
+                    # Clean the line and split by comma
+                    parts = line.strip().split(",")
+
+                    # Check if the list has enough data and matches exactly
+                    # Assuming pet_id is index 0
+                    if len(parts) > 0 and parts[0] == pet_id:
+                        print(f"Date: {parts[1]} | Service: {parts[2]} | Status: {parts[3]}")
+                        Result = True
+
+                if not Result:
+                    print("No records found for this Pet ID.")
+
+        except FileNotFoundError:
+            print("File not found")
+
+def pet_owner_menu():
+    while True:
+        print("\n" + "="*20)
+        print("  PET OWNER MENU")
+        print("="*20)
+        print("1. View Grooming Slots")
+        print("2. Book a Service")
+        print("3. Reschedule Booking")
+        print("4. Cancel a Booking")
+        print("5. View Service History")
+        print("6. Return to Main Menu")
+
+        choice = input("Enter choice: ") # No int() needed if using strings
+
+        if choice == '1':
+            grooming_slots()
+        elif choice == '2':
+            request_Booking()
+        elif choice == '3':
+            reschedule_booking()
+        elif choice == '4':
+            cancel_booking()
+        elif choice == '5':
+            view_service_history()
+        elif choice == '6':
+            break
 
 
 
