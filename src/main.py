@@ -72,18 +72,16 @@ def show_admin_menu():
                     break
 
                 case 4:
-                    print("replace function to facility assistant here")
-                    break
+                     print("replace function to facility assistant here")
+                     break
 
                 case 5:
-                    print("Quitting program now.")
+                    print("Exiting program now")
                     break
 
                 case _:
                     print("Input can only be in number and within range, please try again.\n")
 
-        except ValueError:
-            print("Input can only be in number and within range, please try again.\n")
 
 # Call main menu
 show_main_menu()

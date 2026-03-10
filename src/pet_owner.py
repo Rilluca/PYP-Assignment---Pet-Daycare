@@ -38,30 +38,85 @@ def grooming_slots():
 
     #in case of error happening, this will prevent it from crashing
     except Exception as e:
-        print("Cannot read file")
+        print("Cannot read file", e)
 
+def automatic_booking_id():
+    try:
+        with open('booking.txt', 'r') as f:
+            count = 0
+            line = f.readline()
+            while line != "":
+                count += 1
+                line = f.readline()
+    except:
+        count = 0
+
+    num = str(count + 1)
+    while len(num) < 10:
+        num = "0" + num
+
+    booking_id = "BK" + num
+    return booking_id
 
 def request_Booking():
     name = input("Please enter your name:")
     pet_id = input("Please enter your pet_id:")
     date = input("Enter date to book (DD-MM-YYYY):")
 
-    booking_id = generate_booking_id()
-    record = booking_id + "," name + "," + date + "," + pet_id + "," + "Pending"
+    booking_id = automatic_booking_id()
+    print("Your Booking ID is:", booking_id)
+    try:
+        with open("booking.txt", "a") as f:
+            text = booking_id + "," + name + "," + date + "," + pet_id + "\n"
+            f.write(text)
+            print ("Booking request successful")
+    except Exception as e:
+        print("Booking request failed", e)
+
+def request_extension():
+    booking_id = input("Please enter your Booking ID:")
+    extension_time = input("Please enter your extension time:")
+
+    extension_id = input("Please enter your extension id:")
+    try:
+        with open("extension.txt", "a")as f:
+            text = extension_id + "," + booking_id + "," + extension_time + "\n"
+            f.write(text)
+            print("Extension request successful")
+
+    except Exception as e:
+        print("Extension request failed", e)
+
+def cancel_booking():
+    booking_id = input("Please enter your Booking ID to cancel:")
 
     try:
-        with open("booking.txt", "as") as f:
-            f.write(record)
-            print("Booking record submitted")
+        with open("booking.txt", "r") as f:
+            new_text = ""
+            line = f.readline()
+            while line != "":
+                if booking_id not in line:
+                    new_text += line
+
+                line = f.readline()
+            with open("booking.txt", "w") as f:
+                f.write(new_text)
+                print("Booking cancelled successfully")
     except Exception as e:
-        print("Cannot submit booking", e)
+        print("Booking cancelled failed", e)
 
-def request_Extension():
-    name = input("Please enter your name:")
+def view_service_history():
     pet_id = input("Please enter your pet_id:")
-    booking_id = input("Please enter your Booking ID:")
-
-
+    try:
+        with open("service_history.txt", "r") as f:
+            line = f.readline()
+            print("Service History")
+            while line != "":
+                if pet_id in line:
+                    print(line)
+                line = f.readline()
+    except Exception as e:
+        print("Service file not found", e)
 
 
 
