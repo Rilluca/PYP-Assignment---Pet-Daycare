@@ -83,6 +83,8 @@ def show_admin_menu():
                 case _:
                     print("Input can only be in number and within range, please try again.\n")
 
+        except ValueError:
+            print("Input can only be in number and within range, please try again.\n")
 
 # Credentials for admin login
 admin_username = "admin"
