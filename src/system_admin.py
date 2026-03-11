@@ -2,8 +2,6 @@
 # - Manage pet records and service options (add, update, remove).
 # - View all data (owners, pets, bookings, payments).
 # - Generate overall service report (total bookings, revenue, available slots).
-from idlelib.autocomplete import TRY_A
-
 def sys_viewdata():
     print("""
     ===========================
@@ -28,7 +26,6 @@ def sys_viewdata():
                                     credentials = line.strip().split(",")
                                     print(credentials[0])
                         case 2:
-
                             print("pets")
                         case 3:
                             print("bookings")
