@@ -9,10 +9,11 @@ daycare_staff_menu = f"""
 Daycare/Grooming Staff Menu
 {'-' * 50}
 What would you like to do today?
-1. Update care status
-2. Add daily care and grooming record
-3. Generate summary report
-4. Quit
+1. Add daily care record
+2. Add daily grooming record
+3. Update pet care status
+4. Generate summary report
+5. Quit
 """
 
 def show_daycare_staff_menu():

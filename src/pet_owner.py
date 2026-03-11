@@ -8,7 +8,7 @@ def grooming_slots():
     #try except is used to catch errors
     try:
         #open the file "slots.txt" in read mode
-        with open('slots.txt', 'r') as f:
+        with open('../data/slots.txt', 'r') as f:
         #with statement automatically closes the file unlike file
             print("Available slots")
             #looping through the file one by one
@@ -39,9 +39,21 @@ def grooming_slots():
     except Exception as e:
         print("Cannot read file", e)
 
+def existing_books(booking_id):
+    try:
+        with open('../data/booking.txt', 'r') as f:
+            for line in f:
+                parts = line.strip().split(",")
+                if parts[0] == booking_id:
+                    return True
+    except:
+        pass
+
+    return False
+
 def automatic_booking_id():
     try:
-        with open('booking.txt', 'r') as f:
+        with open('../data/booking.txt', 'r') as f:
             count = 0
             line = f.readline()
             while line != "":
@@ -51,7 +63,7 @@ def automatic_booking_id():
         count = 0
 
     num = str(count + 1)
-    while len(num) < 6:
+    while len(num) < 4:
         num = "0" + num
 
     booking_id = "BK" + num
@@ -69,16 +81,21 @@ def request_Booking():
     booking_id = automatic_booking_id()
     print("Your Booking ID is:", booking_id)
     try:
-        with open("booking.txt", "a") as f:
+        with open("../data/booking.txt", "a") as f:
             text = booking_id + "," + name + "," + date + "," + pet_id + "\n"
             f.write(text)
+
+        with open("../data/service_history.txt", "a")as f:
+            text = pet_id + "," + name + "," + date + "," + "Booked\n"
+            f.write(text)
+
             print ("Booking request successful")
     except Exception as e:
         print("Booking request failed", e)
 
 def automatic_request_extension():
     try:
-        with open('extension.txt', 'r') as f:
+        with open('../data/extension.txt', 'r') as f:
             count = 0
             line = f.readline()
 
@@ -91,8 +108,9 @@ def automatic_request_extension():
         while len(num) < 4:
             num = "0" + num
 
-            extension_id = "E" + num
-            return extension_id
+        extension_id = "E" + num
+        return extension_id
+
 def request_extension():
     booking_id = input("Please enter your Booking ID:")
     extension_time = input("Please enter your extension time:")
@@ -100,11 +118,14 @@ def request_extension():
     if booking_id == "" or extension_time == "":
         print("Error: All fields must be filled.")
         return
+    if not existing_books(booking_id):
+        print("Booking ID does not exist")
+        return
 
     extension_id = automatic_request_extension()
     print ("Your extension ID is:", extension_id)
     try:
-        with open("extension.txt", "a")as f:
+        with open("../data/extension.txt", "a")as f:
             text = extension_id + "," + booking_id + "," + extension_time + "\n"
             f.write(text)
             print("Extension request successful")
@@ -115,8 +136,12 @@ def request_extension():
 def cancel_booking():
     booking_id = input("Please enter your Booking ID to cancel:")
 
+    if not existing_books(booking_id):
+        print("Booking ID does not exist")
+        return
+
     try:
-        with open("booking.txt", "r") as f:
+        with open("../data/booking.txt", "r") as f:
             new_text = ""
             line = f.readline()
             while line != "":
@@ -124,7 +149,7 @@ def cancel_booking():
                     new_text += line
 
                 line = f.readline()
-            with open("booking.txt", "w") as f:
+            with open("../data/booking.txt", "w") as f:
                 f.write(new_text)
                 print("Booking cancelled successfully")
     except Exception as e:
@@ -134,10 +159,14 @@ def reschedule_booking():
     booking_id =input("Please enter your Booking ID to reschedule:")
     new_date = input("Please enter your new date (DD-MM-YYYY):")
 
+    if not existing_books(booking_id):
+        print("Booking ID does not exist")
+        return
+
     Result = False
 
     try:
-        with open("booking.txt", "r") as f:
+        with open("../data/booking.txt", "r") as f:
             updated_booking = ""
             line = f.readline()
             Result = False
@@ -149,7 +178,7 @@ def reschedule_booking():
                     line = ",".join(parts) + "\n"
                 updated_booking += line
                 line = f.readline()
-        with open("booking.txt", "w") as f:
+        with open("../data/booking.txt", "w") as f:
             f.write(updated_booking)
         if Result == True:
             print("Booking rescheduled successfully")
@@ -159,30 +188,42 @@ def reschedule_booking():
         print("Error: Rescheduling failed!")
 
 def view_service_history():
-        pet_id = input("Please enter your pet_id: ").strip()
+        name = input("Please enter your name: ").strip().lower()
         Result = False
 
         try:
-            with open("service_history.txt", "r") as f:
-                print(f"\n--- Service History for {pet_id} ---")
+            with open("../data/service_history.txt", "r") as f:
+                print(f"\n--- Service History for {name} ---")
                 for line in f:
-                    # Clean the line and split by comma
+
                     parts = line.strip().split(",")
 
-                    # Check if the list has enough data and matches exactly
-                    # Assuming pet_id is index 0
-                    if len(parts) > 0 and parts[0] == pet_id:
-                        print(f"Date: {parts[1]} | Service: {parts[2]} | Status: {parts[3]}")
+                    if len(parts) >= 4 and parts[1].strip().lower() == name:
+                        print(f"Pet ID: {parts[0]} | Owner Name: {parts[1]} | Service Date: {parts[2]} | Status: {parts[3]}")
                         Result = True
 
                 if not Result:
-                    print("No records found for this Pet ID.")
+                    print("No records found for this HOOMAN.")
 
         except FileNotFoundError:
             print("File not found")
 
+def continue_or_menu():
+    choice = input("Do you want to continue (y/n)?").lower()
+
+    if choice == "y":
+        return True
+    elif choice == "n":
+        pet_owner_menu()
+        return False
+    else:
+        print("Invalid choice")
+        return continue_or_menu()
+
+
 def pet_owner_menu():
-    while True:
+    menu = True
+    while menu:
         print("\n" + "="*20)
         print("  PET OWNER MENU")
         print("="*20)
@@ -194,7 +235,7 @@ def pet_owner_menu():
         print("6. View Service History")
         print("7. Return to Main Menu")
 
-        choice = input("Enter choice: ") # No int() needed if using strings
+        choice = input("Enter choice: ")
 
         if choice == '1':
             grooming_slots()
@@ -209,7 +250,11 @@ def pet_owner_menu():
         elif choice == '6':
             view_service_history()
         else:
+            print("Invalid choice")
             break
+
+        menu = continue_or_menu()
+
 
 
 
