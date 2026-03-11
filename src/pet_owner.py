@@ -228,7 +228,7 @@ def pet_owner_menu():
         print("6. View Service History")
         print("7. Return to Main Menu")
 
-        choice = input("Enter choice: ") # No int() needed if using strings
+        choice = input("Enter choice: ")
 
         if choice == '1':
             grooming_slots()
