@@ -63,7 +63,7 @@ def automatic_booking_id():
         count = 0
 
     num = str(count + 1)
-    while len(num) < 6:
+    while len(num) < 4:
         num = "0" + num
 
     booking_id = "BK" + num
@@ -190,11 +190,9 @@ def view_service_history():
             with open("../data/service_history.txt", "r") as f:
                 print(f"\n--- Service History for {pet_id} ---")
                 for line in f:
-                    # Clean the line and split by comma
+
                     parts = line.strip().split(",")
 
-                    # Check if the list has enough data and matches exactly
-                    # Assuming pet_id is index 0
                     if len(parts) > 0 and parts[0] == pet_id:
                         print(f"Date: {parts[1]} | Service: {parts[2]} | Status: {parts[3]}")
                         Result = True
@@ -205,14 +203,18 @@ def view_service_history():
         except FileNotFoundError:
             print("File not found")
 
-def continue_or_exit():
+def continue_or_menu():
     choice = input("Do you want to continue (y/n)?").lower()
 
     if choice == "y":
         return True
+    elif choice == "n":
+        pet_owner_menu()
+        return False
     else:
-        print("Exiting....")
-        exit()
+        print("Invalid choice")
+        return continue_or_menu()
+
 
 def pet_owner_menu():
     menu = True
@@ -246,7 +248,8 @@ def pet_owner_menu():
             print("Invalid choice")
             break
 
-        menu = continue_or_exit()
+        menu = continue_or_menu()
+
 
 
 
