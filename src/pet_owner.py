@@ -41,7 +41,7 @@ def grooming_slots():
 
 def existing_books(booking_id):
     try:
-        with open('booking.txt', 'r') as f:
+        with open('../data/booking.txt', 'r') as f:
             for line in f:
                 parts = line.strip().split(",")
                 if parts[0] == booking_id:
@@ -84,6 +84,11 @@ def request_Booking():
         with open("../data/booking.txt", "a") as f:
             text = booking_id + "," + name + "," + date + "," + pet_id + "\n"
             f.write(text)
+
+        with open("../data/service_history.txt", "a")as f:
+            text = pet_id + "," + name + "," + date + "," + "Booked\n"
+            f.write(text)
+
             print ("Booking request successful")
     except Exception as e:
         print("Booking request failed", e)
@@ -183,7 +188,7 @@ def reschedule_booking():
         print("Error: Rescheduling failed!")
 
 def view_service_history():
-        name = input("Please enter your name: ").strip()
+        name = input("Please enter your name: ").strip().lower()
         Result = False
 
         try:
@@ -193,8 +198,8 @@ def view_service_history():
 
                     parts = line.strip().split(",")
 
-                    if len(parts) >= 4 and parts[1].lower() == name:
-                        print(f"Pet ID: {parts[0]} | Service: {parts[2]} | Status: {parts[3]}")
+                    if len(parts) >= 4 and parts[1].strip().lower() == name:
+                        print(f"Pet ID: {parts[0]} | Owner Name: {parts[1]} | Service Date: {parts[2]} | Status: {parts[3]}")
                         Result = True
 
                 if not Result:
