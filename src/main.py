@@ -9,9 +9,7 @@ welcome_message = f"""
 {'-' * 50}
 Welcome to Paws & Play Hub Booking and Management System!
 {'-' * 50}
-Please choose an option:
-1. Sign up.
-2. Log in.
+Please log in to continue.
 """
 
 # Menu message for admin
@@ -31,17 +29,10 @@ Welcome admin, select your role for today.
 def show_main_menu():
     # Print the welcome message
     print(welcome_message)
-    logged_in = False
-    user_answer=input("Enter your choice: ")
-    if user_answer == "1":
-        print("signed")
-    elif user_answer == "2":
-        print("log in")
-    else:
-        print("INVALID ANSWER")
+
     # Create a login loop for authorization
     # If username and password are wrong, user can try again without running the program again
-
+    logged_in = False
     while not logged_in:
         # Call the login() function and store the result of login as result
         result = login()
@@ -52,7 +43,7 @@ def show_main_menu():
             logged_in = True
 
         # If result return "user", print user menu
-        if result == "user":
+        elif result == "user":
             pet_owner.pet_owner_menu()
             logged_in = True
 
@@ -62,7 +53,8 @@ def show_admin_menu():
     print(admin_menu)
 
     # Create a loop for validating input
-    while True:
+    valid_choice = False
+    while not valid_choice:
         try:
             # Ask user for choice input
             choice_input = int(input("Enter your choice: "))
@@ -71,30 +63,29 @@ def show_admin_menu():
             match choice_input:
                 case 1:
                     print("replace function to system admin here")
-                    break
+                    valid_choice = True
 
                 case 2:
                     print("replace function to booking officer here")
-                    break
+                    valid_choice = True
 
                 case 3:
-                    pet_owner.pet_owner_menu()
+                    daycare_staff.show_daycare_staff_menu()
+                    valid_choice = True
 
                 case 4:
-                     print("replace function to facility assistant here")
-                     break
+                    print("replace function to facility assistant here")
+                    valid_choice = True
 
                 case 5:
                     print("Exiting program now")
-                    break
+                    valid_choice = True
 
                 case _:
                     print("Input can only be in number and within range, please try again.\n")
 
-        except Exception as e:
-            print(f"Error: {e}. Please contact admin.")
-
-
+        except ValueError:
+            print("Input can only be in number and within range, please try again.\n")
 
 # Credentials for admin login
 admin_username = "admin"
@@ -112,7 +103,7 @@ def login():
             return "admin"  # Return to result for admin menu
 
         # Open users.txt in read mode
-        with open("users.txt", "r") as file:
+        with open("../data/users.txt", "r") as file:
             # Read all lines in the txt file
             credential_list = file.readlines()
 
