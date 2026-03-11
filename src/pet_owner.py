@@ -31,9 +31,9 @@ def grooming_slots():
                 slots = parts[2]
 
                 #print the information
-                print(f"This is the service id : {service}")
-                print(f"This is the service name : {name}")
-                print(f"This is the available slots : {slots}")
+                print(f"Service id : {service}")
+                print(f"Service name : {name}")
+                print(f"Available slots : {slots}")
 
     #in case of error happening, this will prevent it from crashing
     except Exception as e:
