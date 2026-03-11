@@ -47,7 +47,7 @@ def automatic_booking_id():
 
 def automatic_pet_id():
     try:
-        with open('pet.txt', 'r') as f:
+        with open('../data/pet.txt', 'r') as f:
             count = 0
             line = f.readline()
             while line != "":
@@ -104,7 +104,7 @@ def register_new_pet(username, pet_name, user_password):
 
         #Open file in append mode to add in new users
     pet_id = automatic_pet_id()
-    with open("pet.txt", "a") as file:
+    with open("../data/pet.txt", "a") as file:
         file.write(f"{username}, {pet_id}, {pet_name}, {user_password}\n")
     return True
 
