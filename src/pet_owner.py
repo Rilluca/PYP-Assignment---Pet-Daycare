@@ -183,22 +183,22 @@ def reschedule_booking():
         print("Error: Rescheduling failed!")
 
 def view_service_history():
-        pet_id = input("Please enter your pet_id: ").strip()
+        name = input("Please enter your name: ").strip()
         Result = False
 
         try:
             with open("../data/service_history.txt", "r") as f:
-                print(f"\n--- Service History for {pet_id} ---")
+                print(f"\n--- Service History for {name} ---")
                 for line in f:
 
                     parts = line.strip().split(",")
 
-                    if len(parts) > 0 and parts[0] == pet_id:
+                    if len(parts) > 1 and parts[1] == name:
                         print(f"Date: {parts[1]} | Service: {parts[2]} | Status: {parts[3]}")
                         Result = True
 
                 if not Result:
-                    print("No records found for this Pet ID.")
+                    print("No records found for this HOOMAN.")
 
         except FileNotFoundError:
             print("File not found")
