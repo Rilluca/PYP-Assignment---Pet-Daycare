@@ -77,18 +77,19 @@ def show_sys_admin_menu():
         """)
         try:
             option = int(input("Your choice: "))
-            if option == 1:
-                sys_viewdata()
-            if option == 2:
-                print("nothing yet")
-                break
-            if option == 3:
-                print("nothing yet")
-                break
-            if option == 4:
-                break
-            if option<0 or option>4:
-                ("Enter a valid option")
+            match option:
+                case 1:
+                    sys_viewdata()
+                case 2:
+                    print("nothing yet")
+                    break
+                case 3:
+                    print("nothing yet")
+                    break
+                case 4:
+                    break
+                case _:
+                    print("Enter a valid option")
         except ValueError:
             print("Invalid choice. Please try again.")
         except Exception:
