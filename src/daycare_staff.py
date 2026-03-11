@@ -47,4 +47,3 @@ def show_daycare_staff_menu():
         except ValueError:
             print("Input can only be in number and within range, please try again.\n")
 
-
