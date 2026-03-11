@@ -20,15 +20,29 @@ def sys_viewdata():
               if 0<option<6:
                     match option:
                         case 1:
-                            with open("users.txt", "r") as file:
+                            with open("../data/users.txt", "r") as file:
                                 credential_list = file.readlines()
                                 for line in credential_list:
                                     credentials = line.strip().split(",")
                                     print(credentials[0])
                         case 2:
-                            print("pets")
+                            with open("../data/service_history.txt", "r") as file:
+                                pet_list = file.readlines()
+                                for line in pet_list:
+                                    pet_list = line.strip().split(",")
+                                    print("Pet ID-",pet_list[0],end="\n")
+                                    print("Username-",pet_list[1],end="\n")
+                                    print("Date-",pet_list[2],end="\n")
+                                    print("Booking status-",pet_list[3],end="\n\n")
                         case 3:
-                            print("bookings")
+                            with open("../data/booking.txt", "r") as file:
+                                booking_list = file.readlines()
+                                for line in booking_list:
+                                    booking_list = line.strip().split(",")
+                                    print("Booking ID-",booking_list[0],end="\n")
+                                    print("Username-",booking_list[1],end="\n")
+                                    print("Date-",booking_list[2],end="\n")
+                                    print("PetID",booking_list[3],end="\n\n")
                         case 4:
                             print("payments")
                         case 5:
@@ -76,7 +90,8 @@ def show_sys_admin_menu():
         case 1:
             sys_viewdata()
         case 2:
-            sys_manage()
+            print("nothing yet")
         case 3:
-            sys_summery()
+            print("nothing yet")
+
 show_sys_admin_menu()
