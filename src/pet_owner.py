@@ -62,6 +62,10 @@ def request_Booking():
     pet_id = input("Please enter your pet_id:")
     date = input("Enter date to book (DD-MM-YYYY):")
 
+    if name == "" or pet_id == "" or date == "":
+        print("Every field must be filled")
+        return
+
     booking_id = automatic_booking_id()
     print("Your Booking ID is:", booking_id)
     try:
@@ -72,11 +76,33 @@ def request_Booking():
     except Exception as e:
         print("Booking request failed", e)
 
+def automatic_request_extension():
+    try:
+        with open('extension.txt', 'r') as f:
+            count = 0
+            line = f.readline()
+
+            while line != "":
+                count += 1
+                line = f.readline()
+    except:
+        count = 0
+        num = str(count + 1)
+        while len(num) < 4:
+            num = "0" + num
+
+            extension_id = "E" + num
+            return extension_id
 def request_extension():
     booking_id = input("Please enter your Booking ID:")
     extension_time = input("Please enter your extension time:")
 
-    extension_id = input("Please enter your extension id:")
+    if booking_id == "" or extension_time == "":
+        print("Error: All fields must be filled.")
+        return
+
+    extension_id = automatic_request_extension()
+    print ("Your extension ID is:", extension_id)
     try:
         with open("extension.txt", "a")as f:
             text = extension_id + "," + booking_id + "," + extension_time + "\n"
@@ -109,11 +135,10 @@ def reschedule_booking():
     new_date = input("Please enter your new date (DD-MM-YYYY):")
 
     Result = False
-    updated_booking = ""
 
     try:
         with open("booking.txt", "r") as f:
-            new_text = ""
+            updated_booking = ""
             line = f.readline()
             Result = False
             while line != "":
@@ -122,10 +147,10 @@ def reschedule_booking():
                     parts[2] = new_date
                     Result = True
                     line = ",".join(parts) + "\n"
-                new_text += line
+                updated_booking += line
                 line = f.readline()
         with open("booking.txt", "w") as f:
-            f.write(new_text)
+            f.write(updated_booking)
         if Result == True:
             print("Booking rescheduled successfully")
         else:
@@ -163,10 +188,11 @@ def pet_owner_menu():
         print("="*20)
         print("1. View Grooming Slots")
         print("2. Book a Service")
-        print("3. Reschedule Booking")
-        print("4. Cancel a Booking")
-        print("5. View Service History")
-        print("6. Return to Main Menu")
+        print("3. Request an extension")
+        print("4. Reschedule Booking")
+        print("5. Cancel a Booking")
+        print("6. View Service History")
+        print("7. Return to Main Menu")
 
         choice = input("Enter choice: ") # No int() needed if using strings
 
@@ -175,13 +201,16 @@ def pet_owner_menu():
         elif choice == '2':
             request_Booking()
         elif choice == '3':
-            reschedule_booking()
+            request_extension()
         elif choice == '4':
-            cancel_booking()
+            reschedule_booking()
         elif choice == '5':
-            view_service_history()
+            cancel_booking()
         elif choice == '6':
+            view_service_history()
+        else:
             break
+
 
 
 

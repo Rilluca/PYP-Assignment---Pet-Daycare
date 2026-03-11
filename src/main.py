@@ -69,8 +69,7 @@ def show_admin_menu():
                     break
 
                 case 3:
-                    daycare_staff.show_daycare_staff_menu()
-                    break
+                    pet_owner.pet_owner_menu()
 
                 case 4:
                      print("replace function to facility assistant here")
@@ -82,6 +81,10 @@ def show_admin_menu():
 
                 case _:
                     print("Input can only be in number and within range, please try again.\n")
+
+        except Exception as e:
+            print(f"Error: {e}. Please contact admin.")
+
 
 
 # Credentials for admin login
