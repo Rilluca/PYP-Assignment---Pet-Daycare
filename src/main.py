@@ -103,7 +103,7 @@ def login():
             return "admin"  # Return to result for admin menu
 
         # Open users.txt in read mode
-        with open("users.txt", "r") as file:
+        with open("../data/users.txt", "r") as file:
             # Read all lines in the txt file
             credential_list = file.readlines()
 

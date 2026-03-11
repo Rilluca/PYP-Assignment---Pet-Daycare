@@ -8,7 +8,7 @@ def grooming_slots():
     #try except is used to catch errors
     try:
         #open the file "slots.txt" in read mode
-        with open('slots.txt', 'r') as f:
+        with open('../data/slots.txt', 'r') as f:
         #with statement automatically closes the file unlike file
             print("Available slots")
             #looping through the file one by one
@@ -41,7 +41,7 @@ def grooming_slots():
 
 def automatic_booking_id():
     try:
-        with open('booking.txt', 'r') as f:
+        with open('../data/booking.txt', 'r') as f:
             count = 0
             line = f.readline()
             while line != "":
@@ -69,7 +69,7 @@ def request_Booking():
     booking_id = automatic_booking_id()
     print("Your Booking ID is:", booking_id)
     try:
-        with open("booking.txt", "a") as f:
+        with open("../data/booking.txt", "a") as f:
             text = booking_id + "," + name + "," + date + "," + pet_id + "\n"
             f.write(text)
             print ("Booking request successful")
@@ -78,7 +78,7 @@ def request_Booking():
 
 def automatic_request_extension():
     try:
-        with open('extension.txt', 'r') as f:
+        with open('../data/extension.txt', 'r') as f:
             count = 0
             line = f.readline()
 
@@ -104,7 +104,7 @@ def request_extension():
     extension_id = automatic_request_extension()
     print ("Your extension ID is:", extension_id)
     try:
-        with open("extension.txt", "a")as f:
+        with open("../data/extension.txt", "a")as f:
             text = extension_id + "," + booking_id + "," + extension_time + "\n"
             f.write(text)
             print("Extension request successful")
@@ -116,7 +116,7 @@ def cancel_booking():
     booking_id = input("Please enter your Booking ID to cancel:")
 
     try:
-        with open("booking.txt", "r") as f:
+        with open("../data/booking.txt", "r") as f:
             new_text = ""
             line = f.readline()
             while line != "":
@@ -124,7 +124,7 @@ def cancel_booking():
                     new_text += line
 
                 line = f.readline()
-            with open("booking.txt", "w") as f:
+            with open("../data/booking.txt", "w") as f:
                 f.write(new_text)
                 print("Booking cancelled successfully")
     except Exception as e:
@@ -137,7 +137,7 @@ def reschedule_booking():
     Result = False
 
     try:
-        with open("booking.txt", "r") as f:
+        with open("../data/booking.txt", "r") as f:
             updated_booking = ""
             line = f.readline()
             Result = False
@@ -149,7 +149,7 @@ def reschedule_booking():
                     line = ",".join(parts) + "\n"
                 updated_booking += line
                 line = f.readline()
-        with open("booking.txt", "w") as f:
+        with open("../data/booking.txt", "w") as f:
             f.write(updated_booking)
         if Result == True:
             print("Booking rescheduled successfully")
@@ -163,7 +163,7 @@ def view_service_history():
         Result = False
 
         try:
-            with open("service_history.txt", "r") as f:
+            with open("../data/service_history.txt", "r") as f:
                 print(f"\n--- Service History for {pet_id} ---")
                 for line in f:
                     # Clean the line and split by comma
