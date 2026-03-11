@@ -193,8 +193,8 @@ def view_service_history():
 
                     parts = line.strip().split(",")
 
-                    if len(parts) > 1 and parts[1] == name:
-                        print(f"Date: {parts[1]} | Service: {parts[2]} | Status: {parts[3]}")
+                    if len(parts) >= 4 and parts[1].lower() == name:
+                        print(f"Pet ID: {parts[0]} | Service: {parts[2]} | Status: {parts[3]}")
                         Result = True
 
                 if not Result:
