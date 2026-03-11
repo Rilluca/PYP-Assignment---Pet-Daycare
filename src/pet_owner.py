@@ -70,10 +70,42 @@ def automatic_booking_id():
     return booking_id
 
 def request_Booking():
+    print("-"*20)
     name = input("Please enter your name:")
     pet_id = input("Please enter your pet_id:")
-    date = input("Enter date to book (DD-MM-YYYY):")
+    while True:
+        date = input("Enter date to book (DD-MM-YYYY): ")
 
+        if len(date) != 10:
+            print("Invalid date format")
+            continue
+
+        if date[2] != "-" or date[5] != "-":
+            print("Invalid date format")
+            continue
+
+        day = date[0:2]
+        month = date[3:5]
+        year = date[6:10]
+
+        if not (day.isdigit() and month.isdigit() and year.isdigit()):
+            print("Date must contain numbers")
+            continue
+
+        day = int(day)
+        month = int(month)
+
+        if day < 1 or day > 31:
+            print("Invalid day")
+            continue
+
+        if month < 1 or month > 12:
+            print("Invalid month")
+            continue
+
+        break
+
+    print("-"*20)
     if name == "" or pet_id == "" or date == "":
         print("Every field must be filled")
         return
@@ -108,8 +140,8 @@ def automatic_request_extension():
         while len(num) < 4:
             num = "0" + num
 
-        extension_id = "E" + num
-        return extension_id
+    extension_id = "E" + num
+    return extension_id
 
 def request_extension():
     booking_id = input("Please enter your Booking ID:")
@@ -145,7 +177,8 @@ def cancel_booking():
             new_text = ""
             line = f.readline()
             while line != "":
-                if booking_id not in line:
+                parts = line.strip().split(",")
+                if parts[0] != booking_id:
                     new_text += line
 
                 line = f.readline()
@@ -233,7 +266,6 @@ def pet_owner_menu():
         print("4. Reschedule Booking")
         print("5. Cancel a Booking")
         print("6. View Service History")
-        print("7. Return to Main Menu")
 
         choice = input("Enter choice: ")
 
