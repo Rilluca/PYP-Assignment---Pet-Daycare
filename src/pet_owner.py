@@ -39,6 +39,18 @@ def grooming_slots():
     except Exception as e:
         print("Cannot read file", e)
 
+def existing_books(booking_id):
+    try:
+        with open('booking.txt', 'r') as f:
+            for line in f:
+                parts = line.strip().split(",")
+                if parts[0] == booking_id:
+                    return True
+    except:
+        pass
+
+    return False
+
 def automatic_booking_id():
     try:
         with open('booking.txt', 'r') as f:
@@ -91,14 +103,18 @@ def automatic_request_extension():
         while len(num) < 4:
             num = "0" + num
 
-            extension_id = "E" + num
-            return extension_id
+        extension_id = "E" + num
+        return extension_id
+
 def request_extension():
     booking_id = input("Please enter your Booking ID:")
     extension_time = input("Please enter your extension time:")
 
     if booking_id == "" or extension_time == "":
         print("Error: All fields must be filled.")
+        return
+    if not existing_books(booking_id):
+        print("Booking ID does not exist")
         return
 
     extension_id = automatic_request_extension()
@@ -114,6 +130,10 @@ def request_extension():
 
 def cancel_booking():
     booking_id = input("Please enter your Booking ID to cancel:")
+
+    if not existing_books(booking_id):
+        print("Booking ID does not exist")
+        return
 
     try:
         with open("booking.txt", "r") as f:
@@ -133,6 +153,10 @@ def cancel_booking():
 def reschedule_booking():
     booking_id =input("Please enter your Booking ID to reschedule:")
     new_date = input("Please enter your new date (DD-MM-YYYY):")
+
+    if not existing_books(booking_id):
+        print("Booking ID does not exist")
+        return
 
     Result = False
 
@@ -181,8 +205,18 @@ def view_service_history():
         except FileNotFoundError:
             print("File not found")
 
+def continue_or_exit():
+    choice = input("Do you want to continue (y/n)?").lower()
+
+    if choice == "y":
+        return True
+    else:
+        print("Exiting....")
+        exit()
+
 def pet_owner_menu():
-    while True:
+    menu = True
+    while menu:
         print("\n" + "="*20)
         print("  PET OWNER MENU")
         print("="*20)
@@ -209,7 +243,10 @@ def pet_owner_menu():
         elif choice == '6':
             view_service_history()
         else:
+            print("Invalid choice")
             break
+
+        menu = continue_or_exit()
 
 
 
