@@ -9,7 +9,9 @@ welcome_message = f"""
 {'-' * 50}
 Welcome to Paws & Play Hub Booking and Management System!
 {'-' * 50}
-Please log in to continue.
+Please choose an option:
+1. Sign up.
+2. Log in.
 """
 
 # Menu message for admin
@@ -29,10 +31,17 @@ Welcome admin, select your role for today.
 def show_main_menu():
     # Print the welcome message
     print(welcome_message)
-
+    logged_in = False
+    user_answer=input("Enter your choice: ")
+    if user_answer == "1":
+        print("signed")
+    elif user_answer == "2":
+        print("log in")
+    else:
+        print("INVALID ANSWER")
     # Create a login loop for authorization
     # If username and password are wrong, user can try again without running the program again
-    logged_in = False
+
     while not logged_in:
         # Call the login() function and store the result of login as result
         result = login()
