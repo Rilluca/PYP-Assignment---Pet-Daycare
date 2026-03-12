@@ -89,16 +89,19 @@ def register_new_pet_owner():
     return "Pet owner registered successfully"
 
 def register_new_pet():
-    is_alphabet = True
     username = input("Enter username:")
     pet_name = input("Enter pet name:")
     user_password = input("Enter password:")
-    for c in pet_name:
+
+    is_alphabet = True
+    for c in username:
         if not ((c >= "a" and c <= "z" ) or (c >= "A" and c <= "Z")):
             is_alphabet = False
             break
     if not is_alphabet:
         return "Username can only contain alphabets"
+
+    is_alphabet = True
     for c in pet_name:
         if not ((c >= "a" and c <= "z" ) or (c >= "A" and c <= "Z")):
             is_alphabet = False
@@ -106,15 +109,15 @@ def register_new_pet():
     if not is_alphabet:
         return "Pet name can only contain alphabets"
 
-    with open("users.txt", "r") as file:
-         for line in file:
+        #Open file in append mode to add in new users
+    with open("../data/pet.txt", "a+") as file:
+        file.seek(0)
+        for line in file:
             if line.strip().split(",")[0] == username:
                 return "Username is already taken."
 
-        #Open file in append mode to add in new users
-    pet_id = automatic_pet_id()
-    with open("../data/pet.txt", "a") as file:
-        file.write(f"{username},{pet_id},{pet_name},{user_password}\n")
+        pet_id = automatic_pet_id()
+        file.write(username + "," + pet_id + "," + pet_name + "," + user_password + "\n")
     return "Pet registered successfully."
 
 def add_new_booking():
