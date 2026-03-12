@@ -47,7 +47,7 @@ def automatic_booking_id():
 
 def automatic_pet_id():
     try:
-        with open('pet.txt', 'r') as f:
+        with open('../data/pet.txt', 'r') as f:
             count = 0
             line = f.readline()
             while line != "":
@@ -63,14 +63,20 @@ def automatic_pet_id():
     pet_id = "PT" + num
     return pet_id
 
-def register_new_pet_owner(username, user_password):
+def register_new_pet_owner():
     is_alphabet = True
+    username = input("Enter username:")
+    user_password = input("Enter password:")
     for c in username:
         if not ((c >= "a" and c <= "z") or (c >= "A" and c <= "Z")):
             is_alphabet = False
             break
+
     if not is_alphabet:
         return "Username can only contain alphabets"
+
+    if user_password == "":
+        return "Password cannot be empty"
 
     with open("users.txt", "r") as file:
         for line in file:
@@ -80,11 +86,14 @@ def register_new_pet_owner(username, user_password):
     # Open file in append mode to add in new users
     with open("users.txt", "a") as file:
         file.write(f"{username},{user_password}\n")
-    return True
+    return "Pet owner registered successfully"
 
-def register_new_pet(username, pet_name, user_password):
+def register_new_pet():
     is_alphabet = True
-    for c in username:
+    username = input("Enter username:")
+    pet_name = input("Enter pet name:")
+    user_password = input("Enter password:")
+    for c in pet_name:
         if not ((c >= "a" and c <= "z" ) or (c >= "A" and c <= "Z")):
             is_alphabet = False
             break
@@ -104,9 +113,9 @@ def register_new_pet(username, pet_name, user_password):
 
         #Open file in append mode to add in new users
     pet_id = automatic_pet_id()
-    with open("pet.txt", "a") as file:
-        file.write(f"{username}, {pet_id}, {pet_name}, {user_password}\n")
-    return True
+    with open("../data/pet.txt", "a") as file:
+        file.write(f"{username},{pet_id},{pet_name},{user_password}\n")
+    return "Pet registered successfully."
 
 def add_new_booking():
     username = input("Please enter owner name:")

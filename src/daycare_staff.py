@@ -2,6 +2,7 @@
 # - Update pet care status (feeding, grooming, activities).
 # - Log daily care and grooming records.
 # - Generate service summary report.
+from src.booking_officer import bookingOfficer_menu
 
 # Menu message for daycare/grooming staff
 daycare_staff_menu = f"""
@@ -31,7 +32,7 @@ def show_daycare_staff_menu():
                     break
 
                 case 2:
-                    print("replace function to booking officer here")
+                    print(bookingOfficer_menu)
                     break
 
                 case 3:
