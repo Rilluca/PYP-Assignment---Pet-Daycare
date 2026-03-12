@@ -3,7 +3,8 @@
 # - View all data (owners, pets, bookings, payments).
 # - Generate overall service report (total bookings, revenue, available slots).
 def sys_viewdata():
-    print("""
+    while True:
+        print("""
     ===========================
     View All Data
     ===========================
@@ -14,7 +15,6 @@ def sys_viewdata():
     4.Payments
     5.Exit
     """)
-    while True:
         try:
               option = int(input("Your choice: "))
               if 0<option<6:
@@ -63,7 +63,8 @@ def sys_summery():
     print("smth")
 
 def show_sys_admin_menu():
-    print("""
+    while True:
+        print("""
     ===========================
     System admin menu
     ===========================
@@ -71,27 +72,25 @@ def show_sys_admin_menu():
     1. View All Data
     2. Manage Pet and Service Records
     3. Generate overall service report
-    """)
-    while True:
+    4. Exit
+        """)
         try:
-              option = int(input("Your choice: "))
-              if option == 1:
-                  break
-              if option == 2:
-                  break
-              if option == 3:
-                  break
-              print("Enter a valid option")
+            option = int(input("Your choice: "))
+            match option:
+                case 1:
+                    sys_viewdata()
+                case 2:
+                    print("nothing yet")
+                    break
+                case 3:
+                    print("nothing yet")
+                    break
+                case 4:
+                    break
+                case _:
+                    print("Enter a valid option")
         except ValueError:
             print("Invalid choice. Please try again.")
         except Exception:
             print("Unknown error occured. Please try again.")
-    match option:
-        case 1:
-            sys_viewdata()
-        case 2:
-            print("nothing yet")
-        case 3:
-            print("nothing yet")
-
 show_sys_admin_menu()
