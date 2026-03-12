@@ -4,7 +4,7 @@ def add_facility():
     area=input("Enter are to prepare (Play Area/ Grooming Station )")
     status=input("Enter preparation Status (Ready / Cleaning Required )")
 
-    file=open("maintenance.txt","a")
+    file=open("../data/maintenance.txt", "a")
     file.write(f"{area},{status},{datetime.datetime.now()}\n")
     print("Facility status added ")
     file.close()
@@ -13,7 +13,7 @@ def add_alert():
     pet_id=input("Enter Pet ID : ")
     alert=input("Ener special care / medical alert : ")
 
-    file=open("pets.txt","a")
+    file=open("../data/pet.txt","a")
     file.write(f"{pet_id},ALERT, {alert}\n")
     print("Alert added successfully")
 
@@ -22,7 +22,7 @@ def check_overdue():
     now=datetime.datetime.now()
 
     try:
-        file=open("booking.txt","r")
+        file=open("../data/booking.txt","r")
         bookings=file.readlines()
 
         print("\nChecking for overdue \n")

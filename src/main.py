@@ -3,7 +3,8 @@
 # Import other Python files
 import pet_owner
 import daycare_staff
-from src import booking_officer
+import booking_officer
+import facility_assistant
 
 # Welcome message to welcome user
 welcome_message = f"""
@@ -75,7 +76,7 @@ def show_admin_menu():
                     valid_choice = True
 
                 case 4:
-                    print("replace function to facility assistant here")
+                    facility_assistant.main_menu()
                     valid_choice = True
 
                 case 5:
