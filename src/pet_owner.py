@@ -152,14 +152,15 @@ def automatic_request_extension():
 
 def request_extension():
     booking_id = input("Please enter your Booking ID:")
-    extension_time = input("Please enter your extension time:")
-    if not validate_date(extension_time):
+    extension_date = input("Please enter your extension time:")
+    if not validate_date(extension_date):
         print("Invalid date format. Use DD-MM-YYYY")
         return
 
-    if booking_id == "" or extension_time == "":
+    if booking_id == "" or extension_date == "":
         print("Error: All fields must be filled.")
         return
+
     if not existing_books(booking_id):
         print("Booking ID does not exist")
         return
@@ -168,7 +169,7 @@ def request_extension():
     print ("Your extension ID is:", extension_id)
     try:
         with open("../data/extension.txt", "a")as f:
-            text = extension_id + "," + booking_id + "," + extension_time + "\n"
+            text = extension_id + "," + booking_id + "," + extension_date + "\n"
             f.write(text)
             print("Extension request successful")
 
@@ -206,17 +207,8 @@ def reschedule_booking():
             print("Booking ID does not exist")
             return
 
-        if len(new_date) != 10 or new_date[2] != "-" or new_date[5] != "-":
+        if not validate_date(new_date):
             print("Invalid date format. Use DD-MM-YYYY")
-            return
-
-        day, month, year = new_date[:2], new_date[3:5], new_date[6:]
-        if not (day.isdigit() and month.isdigit() and year.isdigit()):
-            print("Date must contain numbers")
-            return
-        day, month = int(day), int(month)
-        if not (1 <= day <= 31) or not (1 <= month <= 12):
-            print("Invalid day or month")
             return
 
         updated_booking = ""
