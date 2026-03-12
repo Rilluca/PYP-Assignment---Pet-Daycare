@@ -61,5 +61,3 @@ def main_menu():
             break
         else:
             print("Invalid Choice ")
-
-main_menu()
