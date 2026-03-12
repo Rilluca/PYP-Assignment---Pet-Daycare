@@ -312,19 +312,7 @@ def update_records():
     print('-' * 50)
     print(f"{'No':<3} | {'Pet ID':<8} | {'Pet Name':12} | {'Care Type':12} | {'Status':12} | {'Date':12}")
 
-    with open("../data/care_records.txt", "r") as f:
-        pet_list = f.readlines()
-
-        # Counter for numbering of the menu
-        menu_index = 1
-
-        for pet in pet_list:
-            pet_data = pet.strip().split(",")
-
-            print(f"{menu_index:<3} | {pet_data[1]:<8} | {pet_data[0]:12} | {pet_data[2]:12} | {pet_data[3]:12} | {pet_data[4]:12}")
-
-            # Numbering will increase for each loop of data
-            menu_index += 1
+    view_records()
 
     valid_choice = False
     while not valid_choice:
