@@ -134,6 +134,48 @@ def add_care_records(pet_id, pet_name, care_type, status, date):
         for record in record_list:
             f.write(record)
 
+# Function for selecting the pet for add_care_menu
+def select_pet_menu():
+    # Section to print the pet menu
+    with open("../data/pet.txt", "r") as f:
+        pet_list = f.readlines()
+
+        # Counter for numbering of the menu
+        menu_index = 1
+
+        print(f"{'No':<3} | {'Pet ID':<8} | {'Pet Name':12}")
+
+        for pet in pet_list:
+            pet_data = pet.strip().split(",")
+
+            print(f"{menu_index:<3} | {pet_data[1]:<8} | {pet_data[0]:12}")
+
+            # Numbering will increase for each loop of data
+            menu_index += 1
+
+    # Section to validate the input and return the value back
+    valid_choice = False
+    while not valid_choice:
+        try:
+            choice = int(input("\nChoose a pet to add record for: "))
+
+            # Check if input is within the length of the txt file
+            if 1 <= choice <= len(pet_list):
+                # Choice = index - 1
+                selected_pet = pet_list[choice - 1]
+                # Split the selected line
+                selected_pet_data = selected_pet.strip().split(",")
+                valid_choice = True
+
+                # Return back pet name and pet ID because that's what we only need now
+                return selected_pet_data[0], selected_pet_data[1]
+
+            else:
+                print("Number out of range, please try again.")
+
+        except ValueError:
+            print("Invalid input, please try again.\n")
+
 # Function to show add care menu and options
 def add_care_menu():
     # Ask for user input
@@ -141,10 +183,11 @@ def add_care_menu():
     print("Add New Record")
     print('-' * 50)
 
-    # Add it here later
+    # Call function to select pet
+    pet_id, pet_name = select_pet_menu()
 
     # Selection input for care type
-    print("Choose Care Type:")
+    print("\nChoose Care Type:")
     print("1. Feeding")
     print("2. Grooming")
     print("3. Activities")
@@ -174,7 +217,7 @@ def add_care_menu():
             print("Invalid input, please try again.\n")
 
     # Selection input for status
-    print("Choose Status:")
+    print("\nChoose Status:")
     print("1. Pending")
     print("2. In-progress")
     print("3. Done")
@@ -203,9 +246,9 @@ def add_care_menu():
         except ValueError:
             print("Invalid input, please try again.\n")
 
-    date = input("Enter Date (dd/mm/yyyy): ")
+    date = input("\nEnter Date (dd/mm/yyyy): ")
 
-    # add_care_records(pet_id, pet_name, care_type, status, date)
+    add_care_records(pet_id, pet_name, care_type, status, date)
 
     print("Log added successfully!")
 
@@ -215,7 +258,7 @@ def view_all_records():
         record_list = f.readlines()
 
         # Counter for the numbering of data
-        data_index = 1
+        menu_index = 1
 
         # Print the data into specific format
         print('-' * 50)
@@ -226,17 +269,10 @@ def view_all_records():
         for record in record_list:
             record_data = record.strip().split(",")
 
-            # Assign each variable to the data row in the txt file
-            pet_name = record_data[0]
-            pet_id = record_data[1]
-            care_type = record_data[2]
-            status = record_data[3]
-            date = record_data[4]
-
-            print(f"{data_index:<3} | {pet_id:<8} | {pet_name:12} | {care_type:12} | {status:12} | {date:12}")
+            print(f"{menu_index:<3} | {record_data[1]:<8} | {record_data[0]:12} | {record_data[2]:12} | {record_data[3]:12} | {record_data[4]:12}")
 
             # Numbering will increase for each loop of data
-            data_index += 1
+            menu_index += 1
 
     # Loop to ask user if they want to go back to previous menu
     valid_choice = False
