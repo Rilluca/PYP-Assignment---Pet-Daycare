@@ -282,6 +282,8 @@ def view_records():
             # Numbering will increase for each loop of data
             menu_index += 1
 
+    return record_list
+
 # Function to validate input from view_records
 def view_all_records():
     print('-' * 50)
@@ -312,7 +314,7 @@ def update_records():
     print('-' * 50)
     print(f"{'No':<3} | {'Pet ID':<8} | {'Pet Name':12} | {'Care Type':12} | {'Status':12} | {'Date':12}")
 
-    view_records()
+    record_list = view_records()
 
     valid_choice = False
     while not valid_choice:
@@ -320,9 +322,9 @@ def update_records():
             choice = int(input("\nChoose a record to update: "))
 
             # Check if input is within the length of the txt file
-            if 1 <= choice <= len(pet_list):
+            if 1 <= choice <= len(record_list):
                 # Choice = index - 1
-                selected_pet = pet_list[choice - 1]
+                selected_pet = record_list[choice - 1]
                 # Split the selected line
                 selected_pet_data = selected_pet.strip().split(",")
                 valid_choice = True
@@ -331,4 +333,3 @@ def update_records():
 
         except ValueError:
             print("Invalid input, please try again.\n")
-
