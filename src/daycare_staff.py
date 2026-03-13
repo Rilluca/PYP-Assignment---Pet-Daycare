@@ -266,7 +266,7 @@ def add_care_menu():
             print("Invalid input, please try again.")
 
 # Function to hold record viewing
-def view_records():
+def fetch_records():
     with open("../data/care_records.txt", "r") as f:
         record_list = f.readlines()
 
@@ -291,7 +291,7 @@ def view_all_records():
     print('-' * 50)
     print(f"{'No':<3} | {'Pet ID':<8} | {'Pet Name':12} | {'Care Type':12} | {'Status':12} | {'Date':12}")
 
-    view_records()
+    fetch_records()
 
     # Loop to ask user if they want to go back to previous menu
     valid_choice = False
@@ -314,7 +314,7 @@ def update_records():
     print('-' * 50)
     print(f"{'No':<3} | {'Pet ID':<8} | {'Pet Name':12} | {'Care Type':12} | {'Status':12} | {'Date':12}")
 
-    record_list = view_records()
+    record_list = fetch_records()
 
     valid_choice = False
     while not valid_choice:
@@ -333,3 +333,60 @@ def update_records():
 
         except ValueError:
             print("Invalid input, please try again.\n")
+
+    print(f"\nUpdate Status (Current Status: {selected_pet_data[3]})")
+    print("1. Pending")
+    print("2. In-progress")
+    print("3. Done")
+
+    valid_status = False
+    while not valid_status:
+        try:
+            status_choice = int(input("Enter new status: "))
+
+            new_status = ""
+            match status_choice:
+                case 1:
+                    new_status = "Pending"
+                case 2:
+                    new_status = "In-progress"
+                case 3:
+                    new_status = "Done"
+                case _:
+                    print("Invalid input, please try again.\n")
+                    continue
+
+            if new_status == selected_pet_data[3]:
+                print("Cannot select the same status.")
+            else:
+                selected_pet_data[3] = new_status
+                valid_status = True
+
+        except ValueError:
+            print("Invalid input, please try again.\n")
+
+    date = input("\nEnter Date (dd/mm/yyyy): ")
+    selected_pet_data[4] = date
+
+    updated_record_string = f"{selected_pet_data[1]},{selected_pet_data[0]},{selected_pet_data[2]},{selected_pet_data[3]},{selected_pet_data[4]}\n"
+
+    record_list[choice - 1] = updated_record_string
+
+    with open("../data/care_records.txt", "w") as f:
+        for record in record_list:
+            f.write(record)
+
+    print("\nRecord updated successfully!")
+
+    valid_choice = False
+    while not valid_choice:
+        choice = input("Would you like to edit another record? N will go back to previous menu. (y/n): ")
+
+        if choice == 'y' or choice == 'Y':
+            update_records()
+            valid_choice = True
+        elif choice == 'n' or choice == 'N':
+            print("Exiting program now.")
+            valid_choice = True
+        else:
+            print("Invalid input, please try again.")
