@@ -30,7 +30,7 @@ def grooming_slots():
                     booked_slots += 1
     #if the file doesn't exist, continue
     except FileNotFoundError:
-        pass
+        print("Booking file not found")
 
     available_slots = max_slots - booked_slots
 
@@ -57,7 +57,7 @@ def existing_books(booking_id):
                 if parts[0] == booking_id:
                     #check if booking id matches index 0
                     return True
-    except:
+    except FileNotFoundError:
         #if errors happen, ignore
         pass
     #return false if booking id was not found
@@ -78,7 +78,7 @@ def automatic_booking_id():
                 #read the next line
                 line = f.readline()
     #if file does not exist
-    except:
+    except FileNotFoundError:
         #start count at 0
         count = 0
     #convert the next booking num to str
