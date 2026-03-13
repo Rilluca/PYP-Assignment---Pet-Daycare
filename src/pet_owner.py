@@ -5,65 +5,87 @@
 
 #Function to display the available slots
 def grooming_slots():
+    #asks the user to enter a date
+    date = input("Please enter your date (DD-MM-YYYY):")
+    #check whether the date format is valid or not
+    if not validate_date(date):
+        print("Invalid date format or values. Only DD-MM-YYYY")
+        return
+    #max num of available slots per day
+    max_slots = 10
+    #variable to count how many bookings exists for a day
+    booked_slots = 0
     #try except is used to catch errors
     try:
-        #open the file "slots.txt" in read mode
-        with open('../data/slots.txt', 'r') as f:
+        #open the file in read mode
+        with open('../data/booking.txt', 'r') as f:
         #with statement automatically closes the file unlike file
-            print("Available slots")
             #looping through the file one by one
             for line in f:
-                #create an empty string to store the line
-                text = ""
-                #looping through each character in line
-                for c in line:
-                    #if character is not in new line, add it to the empty string
-                    if c!= "\n":
-                        text += c
-                #split the line using comma as a seperator
-                parts = text.split(",")
-
-                #storeing the variable service into index no 0
-                service = parts[0]
-                #storing the variable name into index no 1
-                name = parts[1]
-                #storing the variable slots into index no 1
-                slots = parts[2]
-
-                #print the information
-                print(f"Service id : {service}")
-                print(f"Service name : {name}")
-                print(f"Available slots : {slots}")
-
-    #in case of error happening, this will prevent it from crashing
-    except Exception as e:
-        print("Cannot read file", e)
-
-def existing_books(booking_id):
-    try:
-        with open('../data/booking.txt', 'r') as f:
-            for line in f:
+                #remove newline character and split it by commas
                 parts = line.strip().split(",")
-                if parts[0] == booking_id:
-                    return True
-    except:
+                #looping through each character in line
+                if len(parts) >=4 and parts[2] == date:
+                    #if character is not in new line, add it to the empty string
+                    booked_slots += 1
+    #if the file doesn't exist, continue
+    except FileNotFoundError:
         pass
 
+    available_slots = max_slots - booked_slots
+
+    if available_slots < 0:
+         available_slots = 0
+
+    #display the information
+    print("Date:", date)
+    print("Maximum slots:", max_slots)
+    print("Booked slots:", booked_slots)
+    print("Available slots:", available_slots)
+
+
+#function to check if  a booking ID already exists
+def existing_books(booking_id):
+    #try block to safely read the booking file
+    try:
+        #open the file in read mode
+        with open('../data/booking.txt', 'r') as f:
+            #loop through every line in the file
+            for line in f:
+                #remove new line and split the line by comma
+                parts = line.strip().split(",")
+                if parts[0] == booking_id:
+                    #check if booking id matches index 0
+                    return True
+    except:
+        #if errors happen, ignore
+        pass
+    #return false if booking id was not found
     return False
 
+#Function to automatically generate booking
 def automatic_booking_id():
     try:
+        #open the fle in read mode
         with open('../data/booking.txt', 'r') as f:
+            #counter set to 0
             count = 0
+            #read the first line
             line = f.readline()
+            #while line is not empty, increase counter by 1
             while line != "":
                 count += 1
+                #read the next line
                 line = f.readline()
+    #if file does not exist
     except:
+        #start count at 0
         count = 0
-
+    #convert the next booking num to str
     num = str(count + 1)
+    #while length of num is less than 4
     while len(num) < 4:
+        #add 0 in front of the number
         num = "0" + num
 
     booking_id = "BK" + num

@@ -78,13 +78,13 @@ def register_new_pet_owner():
     if user_password == "":
         return "Password cannot be empty"
 
-    with open("users.txt", "r") as file:
+    with open("../data/users.txt", "r") as file:
         for line in file:
             if line.strip().split(",")[0] == username:
-                return "Username is already taken."
+                print("Username is already taken.")
 
     # Open file in append mode to add in new users
-    with open("users.txt", "a") as file:
+    with open("../data/users.txt", "a") as file:
         file.write(f"{username},{user_password}\n")
     return "Pet owner registered successfully"
 
