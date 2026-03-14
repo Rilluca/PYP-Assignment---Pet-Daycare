@@ -1,1 +1,4 @@
-HairCut,2000
+HairCut,40
+Pet Taxi,250
+Grooming,60
+Day Care,50
