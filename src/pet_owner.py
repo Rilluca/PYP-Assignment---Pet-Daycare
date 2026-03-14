@@ -33,6 +33,7 @@ def grooming_slots():
         #display this
         print("Booking file not found")
 
+
     #calculate the variable available slots
     available_slots = max_slots - booked_slots
     #used to prevent negative values

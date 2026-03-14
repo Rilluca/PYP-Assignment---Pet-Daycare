@@ -45,7 +45,6 @@ def sys_viewdata():
                                     print("PetID",booking_list[3],end="\n\n")
                         case 4:
                             print("payments")
-                        case 5:
                             print("Exiting program")
                             break
               else:
@@ -80,10 +79,10 @@ def show_sys_admin_menu():
                 case 1:
                     sys_viewdata()
                 case 2:
-                    print("nothing yet")
+                    sys_manage()
                     break
                 case 3:
-                    print("nothing yet")
+                    sys_summery()
                     break
                 case 4:
                     break
