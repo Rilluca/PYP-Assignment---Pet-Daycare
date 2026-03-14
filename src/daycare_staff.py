@@ -2,7 +2,9 @@
 # - Update pet care status (feeding, grooming, activities).
 # - Log daily care and grooming records.
 # - Generate service summary report.
+
 from src.booking_officer import bookingOfficer_menu, show_bookingOfficer_menu
+import datetime
 
 # Menu message for daycare/grooming staff
 daycare_staff_menu = f"""
@@ -100,7 +102,7 @@ def show_pet_care_menu():
         except ValueError:
             print("Input can only be in number and within range, please try again.\n")
 
-# Own function to count len
+# Custom function to count len
 def count_len(ori_list):
     count = 0
 
@@ -111,10 +113,33 @@ def count_len(ori_list):
     # Return the number back to count
     return count
 
-# Own function to append to list
+# Custom function to append to list
 def append_to_end(ori_list, item_to_append):
     ori_list[count_len(ori_list):count_len(ori_list)] = [item_to_append]
     return ori_list
+
+# Custom function to split list
+def split_list(string):
+    split_list = []
+    word = ""
+
+    for c in string:
+        if c not in (","):
+            word += c
+        else:
+            split_list = append_to_end(split_list, word)
+            word = ""
+
+    split_list = append_to_end(split_list, word)
+    return split_list
+
+# Custom function to strip "\n" when reading lines in file as list
+#
+def strip_lines(s):
+    start = 0
+    end = -1
+
+    return s[start:end]
 
 # Function for selecting the pet for add_care_menu
 def select_pet():
@@ -127,7 +152,8 @@ def select_pet():
         print(f"{'No':<3} | {'Pet ID':<8} | {'Pet Name':12}")
 
         for pet in pet_list:
-            pet_data = pet.strip().split(",")
+            split_pet_data = split_list(pet)
+            pet_data = strip_lines(split_pet_data)
 
             print(f"{menu_index:<3} | {pet_data[1]:<8} | {pet_data[0]:12}")
 
