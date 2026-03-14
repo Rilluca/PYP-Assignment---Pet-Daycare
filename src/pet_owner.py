@@ -154,7 +154,7 @@ def choose_service():
     #initialize counter
     i = 1
     #loop through services
-    for service in services
+    for service in services:
         #dsiplay service
         print(f"{i}. {service[0]} - RM {service[1]}")
         #increament by 1
@@ -206,6 +206,14 @@ def request_Booking():
     #index number for each variables
     service_name, service_fee = service[0], service[1]
 
+    payment = input(f"Do you agree to pay Rm {service_fee}? (Paid/Not Paid): ").capitalize()
+    if payment == "Paid":
+        print("Payment made")
+    elif payment == "Not Paid":
+        print("Payment declined")
+    else:
+        print("Invalid Input")
+
     try:
         #open the file in read mode to check duplicate
         with open("../data/booking.txt", "r") as f:
@@ -228,13 +236,13 @@ def request_Booking():
         #open booking file in append mode
         with open("../data/booking.txt", "a") as f:
             #create booking record text
-            text = f"{booking_id},{name},{pet_id},{date},{service_name},{service_fee}\n"
+            text = f"{booking_id},{name},{pet_id},{date},{service_name},{service_fee},{payment}\n"
             #write the text in the file
             f.write(text)
         #open service history file in append mode
         with open("../data/service_history.txt", "a")as f:
             #create service history record text
-            text = f"{pet_id},{name},{date},{service_name},{service_fee},Booked\n"
+            text = f"{pet_id},{name},{date},{service_name},{service_fee},{payment},Booked\n"
             #write the text in the file
             f.write(text)
 
@@ -247,6 +255,7 @@ def request_Booking():
             print(f"Booking Date    : {date} ")
             print(f"Service Name    : {service_name} ")
             print(f"Service Fee     : RM {service_fee} ")
+            print(f"Payment status  : {payment} ")
             print("="*30 + "\n")
             print ("Booking request successful")
 
@@ -443,7 +452,7 @@ def view_service_history():
                         #display service history
                         status = parts[5] if count_len(parts) > 5 else 'Booked'
                         print(f"Pet ID: {parts[0]} | Owner Name: {parts[1]} | Service Date: {parts[2]} |"
-                              f"Service Name: {parts[3]} | Service Fee: RM {parts[4]} | Status: {status} ")
+                              f"Service Name: {parts[3]} | Service Fee: RM {parts[4]} | Payment Status : {parts[5]} | Status: {status} ")
                         #record found flagged
                         Result = True
                 #if no records are found
