@@ -92,4 +92,3 @@ def show_sys_admin_menu():
             print("Invalid choice. Please try again.")
         except Exception:
             print("Unknown error occured. Please try again.")
-show_sys_admin_menu()

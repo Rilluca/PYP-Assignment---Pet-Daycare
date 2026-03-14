@@ -3,6 +3,9 @@
 # Import other Python files
 import pet_owner
 import daycare_staff
+import booking_officer
+import facility_assistant
+import system_admin
 
 # Welcome message to welcome user
 welcome_message = f"""
@@ -26,6 +29,7 @@ Welcome admin, select your role for today.
 """
 
 # Function to show the main menu
+# Source: Max O'Didily, 2023, Simple user login system using Python, YouTube
 def show_main_menu():
     # Print the welcome message
     print(welcome_message)
@@ -48,6 +52,7 @@ def show_main_menu():
             logged_in = True
 
 # Function to show admin menu
+# Source: Fabio Musanni, 2022, Create menus in Python with match statement, YouTube
 def show_admin_menu():
     # Print admin menu
     print(admin_menu)
@@ -62,11 +67,11 @@ def show_admin_menu():
             # Match case for menu selection
             match choice_input:
                 case 1:
-                    print("replace function to system admin here")
+                    system_admin.show_sys_admin_menu()
                     valid_choice = True
 
                 case 2:
-                    print("replace function to booking officer here")
+                    booking_officer.show_bookingOfficer_menu()
                     valid_choice = True
 
                 case 3:
@@ -74,11 +79,11 @@ def show_admin_menu():
                     valid_choice = True
 
                 case 4:
-                    print("replace function to facility assistant here")
+                    facility_assistant.main_menu()
                     valid_choice = True
 
                 case 5:
-                    print("Exiting program now")
+                    print("Exiting program now.")
                     valid_choice = True
 
                 case _:
@@ -92,6 +97,7 @@ admin_username = "admin"
 admin_password = "123"
 
 # Function to verify and authorize login
+# Source: Max O'Didily, 2023, Simple user login system using Python, YouTube
 def login():
     try:
         # Ask user for username and password input

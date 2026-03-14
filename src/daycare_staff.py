@@ -3,16 +3,31 @@
 # - Log daily care and grooming records.
 # - Generate service summary report.
 
+from src.booking_officer import bookingOfficer_menu, show_bookingOfficer_menu
+import datetime
+
 # Menu message for daycare/grooming staff
 daycare_staff_menu = f"""
 {'-' * 50}
 Daycare/Grooming Staff Menu
 {'-' * 50}
 What would you like to do today?
-1. Update Pet Care Status
-2. Log Daily Records
+1. Manage Pet Care Status
+2. View All Record
 3. Generate Summary Report
 4. Quit
+"""
+
+# Menu message for pet care status
+pet_care_menu = f"""
+{'-' * 50}
+Manage Pet Care Status
+{'-' * 50}
+What would you like to do today?
+1. Log New Record
+2. Update an Existing Record
+3. Remove a Record
+4. Return to previous menu
 """
 
 # Function to show the manu for daycare/grooming staff
@@ -30,15 +45,15 @@ def show_daycare_staff_menu():
             # Match case for menu selection
             match daycare_staff_choice:
                 case 1:
-
+                    show_pet_care_menu()
                     valid_choice = True
 
                 case 2:
-                    print("replace function to booking officer here")
+                    view_all_records()
                     valid_choice = True
 
                 case 3:
-                    print("abc")
+                    print("generate summary report function")
                     valid_choice = True
 
                 case 4:
@@ -51,18 +66,122 @@ def show_daycare_staff_menu():
         except ValueError:
             print("Input can only be in number and within range, please try again.\n")
 
-# Own function to count len
+# Function to show the manu for daycare/grooming staff
+def show_pet_care_menu():
+    # Print the menu
+    print(pet_care_menu)
+
+    # Create a loop to validate the input choice
+    valid_choice = False
+    while not valid_choice:
+        try:
+            # Ask user for choice input
+            pet_care_choice = int(input("Enter your choice: "))
+
+            # Match case for menu selection
+            match pet_care_choice:
+                case 1:
+                    add_care_menu()
+                    valid_choice = True
+
+                case 2:
+                    update_records()
+                    valid_choice = True
+
+                case 3:
+                    print("abc")
+                    valid_choice = True
+
+                case 4:
+                    show_daycare_staff_menu()
+                    valid_choice = True
+
+                case _:
+                    print("Input can only be in number and within range, please try again.\n")
+
+        except ValueError:
+            print("Input can only be in number and within range, please try again.\n")
+
+# Custom function to count len
 def count_len(ori_list):
     count = 0
 
+    # For each item in the list
     for item in ori_list:
+        # Increment count by 1
         count += 1
+    # Return the number back to count
     return count
 
-# Own function to append to list
+# Custom function to append to list
 def append_to_end(ori_list, item_to_append):
     ori_list[count_len(ori_list):count_len(ori_list)] = [item_to_append]
     return ori_list
+
+# Custom function to split list
+def split_list(string):
+    split_list = []
+    word = ""
+
+    for c in string:
+        if c not in (","):
+            word += c
+        else:
+            split_list = append_to_end(split_list, word)
+            word = ""
+
+    split_list = append_to_end(split_list, word)
+    return split_list
+
+# Custom function to strip "\n" when reading lines in file as list
+#
+def strip_lines(s):
+    start = 0
+    end = -1
+
+    return s[start:end]
+
+# Function for selecting the pet for add_care_menu
+def select_pet():
+    with open("../data/pet.txt", "r") as f:
+        pet_list = f.readlines()
+
+        # Counter for numbering of the menu
+        menu_index = 1
+
+        print(f"{'No':<3} | {'Pet ID':<8} | {'Pet Name':12}")
+
+        for pet in pet_list:
+            split_pet_data = split_list(pet)
+            pet_data = strip_lines(split_pet_data)
+
+            print(f"{menu_index:<3} | {pet_data[1]:<8} | {pet_data[0]:12}")
+
+            # Numbering will increase for each loop of data
+            menu_index += 1
+
+    # Section to validate the input and return the value back
+    valid_choice = False
+    while not valid_choice:
+        try:
+            choice = int(input("\nChoose a pet to add record for: "))
+
+            # Check if input is within the length of the txt file
+            if 1 <= choice <= len(pet_list):
+                # Choice = index - 1
+                selected_pet = pet_list[choice - 1]
+                # Split the selected line
+                selected_pet_data = selected_pet.strip().split(",")
+                valid_choice = True
+
+                # Return back pet name and pet ID because that's what we only need now
+                return selected_pet_data[0], selected_pet_data[1]
+
+            else:
+                print("Number out of range, please try again.")
+
+        except ValueError:
+            print("Invalid input, please try again.\n")
 
 # Function to add care records
 def add_care_records(pet_id, pet_name, care_type, status, date):
@@ -89,11 +208,11 @@ def add_care_menu():
     print("Add New Record")
     print('-' * 50)
 
-    pet_id = input("Enter Pet ID (PTxxx): ")
-    pet_name = input("Enter Pet Name: ")
+    # Call function to select pet
+    pet_id, pet_name = select_pet()
 
     # Selection input for care type
-    print("Choose Care Type:")
+    print("\nChoose Care Type:")
     print("1. Feeding")
     print("2. Grooming")
     print("3. Activities")
@@ -123,7 +242,7 @@ def add_care_menu():
             print("Invalid input, please try again.\n")
 
     # Selection input for status
-    print("Choose Status:")
+    print("\nChoose Status:")
     print("1. Pending")
     print("2. In-progress")
     print("3. Done")
@@ -152,10 +271,148 @@ def add_care_menu():
         except ValueError:
             print("Invalid input, please try again.\n")
 
-    date = input("Enter Date (dd/mm/yyyy): ")
+    date = input("\nEnter Date (dd/mm/yyyy): ")
 
     add_care_records(pet_id, pet_name, care_type, status, date)
 
-    print("Log added successfully!")
+    print("Log added successfully!\n")
 
-#
+    # Loop to ask user if they want to go back to previous menu
+    valid_choice = False
+    while not valid_choice:
+        choice = input("Would you like to add another record? N will go back to previous menu. (y/n): ")
+
+        if choice == 'y' or choice == 'Y':
+            add_care_menu()
+            valid_choice = True
+        elif choice == 'n' or choice == 'N':
+            print("Exiting program now.")
+            valid_choice = True
+        else:
+            print("Invalid input, please try again.")
+
+# Function to hold record viewing
+def fetch_records():
+    with open("../data/care_records.txt", "r") as f:
+        record_list = f.readlines()
+
+        # Counter for the numbering of data
+        menu_index = 1
+
+        for record in record_list:
+            record_data = record.strip().split(",")
+
+            # Print the data into specific format
+            print(f"{menu_index:<3} | {record_data[1]:<8} | {record_data[0]:12} | {record_data[2]:12} | {record_data[3]:12} | {record_data[4]:12}")
+
+            # Numbering will increase for each loop of data
+            menu_index += 1
+
+    return record_list
+
+# Function to validate input from view_records
+def view_all_records():
+    print('-' * 50)
+    print("Viewing All Pet Care Records")
+    print('-' * 50)
+    print(f"{'No':<3} | {'Pet ID':<8} | {'Pet Name':12} | {'Care Type':12} | {'Status':12} | {'Date':12}")
+
+    fetch_records()
+
+    # Loop to ask user if they want to go back to previous menu
+    valid_choice = False
+    while not valid_choice:
+        choice = input("\nWould you like to go back to previous menu? N will quit the program. (y/n): ")
+
+        if choice == 'y' or choice == 'Y':
+            show_daycare_staff_menu()
+            valid_choice = True
+        elif choice == 'n' or choice == 'N':
+            print("Exiting program now.")
+            valid_choice = True
+        else:
+            print("Invalid input, please try again.")
+
+# Function to update pet care status
+def update_records():
+    print('-' * 50)
+    print("Update Existing Record")
+    print('-' * 50)
+    print(f"{'No':<3} | {'Pet ID':<8} | {'Pet Name':12} | {'Care Type':12} | {'Status':12} | {'Date':12}")
+
+    record_list = fetch_records()
+
+    valid_choice = False
+    while not valid_choice:
+        try:
+            choice = int(input("\nChoose a record to update: "))
+
+            # Check if input is within the length of the txt file
+            if 1 <= choice <= len(record_list):
+                # Choice = index - 1
+                selected_pet = record_list[choice - 1]
+                # Split the selected line
+                selected_pet_data = selected_pet.strip().split(",")
+                valid_choice = True
+            else:
+                print("Number out of range, please try again.")
+
+        except ValueError:
+            print("Invalid input, please try again.\n")
+
+    print(f"\nUpdate Status (Current Status: {selected_pet_data[3]})")
+    print("1. Pending")
+    print("2. In-progress")
+    print("3. Done")
+
+    valid_status = False
+    while not valid_status:
+        try:
+            status_choice = int(input("Enter new status: "))
+
+            new_status = ""
+            match status_choice:
+                case 1:
+                    new_status = "Pending"
+                case 2:
+                    new_status = "In-progress"
+                case 3:
+                    new_status = "Done"
+                case _:
+                    print("Invalid input, please try again.\n")
+                    continue
+
+            if new_status == selected_pet_data[3]:
+                print("Cannot select the same status.")
+            else:
+                selected_pet_data[3] = new_status
+                valid_status = True
+
+        except ValueError:
+            print("Invalid input, please try again.\n")
+
+    date = input("\nEnter Date (dd/mm/yyyy): ")
+    selected_pet_data[4] = date
+
+    updated_record_string = f"{selected_pet_data[1]},{selected_pet_data[0]},{selected_pet_data[2]},{selected_pet_data[3]},{selected_pet_data[4]}\n"
+
+    record_list[choice - 1] = updated_record_string
+
+    with open("../data/care_records.txt", "w") as f:
+        for record in record_list:
+            f.write(record)
+
+    print("\nRecord updated successfully!")
+
+    valid_choice = False
+    while not valid_choice:
+        choice = input("Would you like to edit another record? N will go back to previous menu. (y/n): ")
+
+        if choice == 'y' or choice == 'Y':
+            update_records()
+            valid_choice = True
+        elif choice == 'n' or choice == 'N':
+            print("Exiting program now.")
+            valid_choice = True
+        else:
+            print("Invalid input, please try again.")
