@@ -85,7 +85,7 @@ def sys_manage():
             option = int(input("Your choice: "))
             match option:
                 case 1:
-                    sys_service_option()
+                    sys_service_option1()
                 case 2:
                     sys_manage()
                 case 3:
