@@ -101,6 +101,7 @@ def register_new_pet():
     if not is_alphabet:
         return "Username can only contain alphabets"
 
+
     is_alphabet = True
     for c in pet_name:
         if not ((c >= "a" and c <= "z" ) or (c >= "A" and c <= "Z")):
