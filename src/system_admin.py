@@ -95,13 +95,13 @@ def sys_manage():
         except Exception:
             print("Unknown error occured. Please try again.")
 
-def sys_service_option():
+def sys_service_option1():
     while True:
         print("""
     ===========================
     Manage
     ===========================
-    What do would u like to manage?
+    What do would u like to do?
     1.Add
     2.Update
     3.Remove
@@ -114,6 +114,107 @@ def sys_service_option():
                     while True:
                         no_found=True
                         service=input("Enter service name: ")
+                        with open("../data/Service.txt", "r") as file:
+                            service_list=file.readlines()
+                            for line in service_list:
+                                service_data = line.strip().split(",")
+                                if service==service_data[0]:
+                                    print("Service already exists")
+                                    no_found= False
+                                    break
+                        if no_found== True:
+                            break
+                    while True:
+                        try:
+                            payment=int(input("Enter payment number: "))
+                        except ValueError:
+                            print("Enter valid price")
+                        else:
+                            break
+                    with open("../data/Service.txt", "a+") as file:
+                        file.write(f"{service},{payment}")
+                    print("Added")
+                case 2:
+                    service=input("Enter service to update: ")
+                    with open("../data/Service.txt", "r") as file:
+                        Service_list = file.readlines()
+                    found = False
+                    index = 0  # manual counter
+                    for line in Service_list:
+                        service_data = line.strip().split(",")
+                        if service_data[0] == service:
+                            found = True
+                            print("Current data:", service_data)
+                            field = input("Which field to update? (service name/price): ").lower()
+                            if field == "service name":
+                                service_data[0] = input("Enter Service option ")
+                                print("service Name updated successfully.")
+                            elif field == "price":
+                                while True:
+                                    try:
+                                        payment = int(input("Enter price: "))
+                                    except ValueError:
+                                        print("Enter valid price")
+                                    else:
+                                        break
+                                service_data[1] = payment
+                                print("Service price updated successfully.")
+                            else:
+                                print("Invalid field.")
+                            Service_list[index] = ",".join(service_data) + "\n"
+                            break
+                        index += 1
+                        if not found:
+                            print("Service name not found.")
+                        with open("../data/Service.txt", "w") as file:
+                            file.writelines(Service_list)
+                case 3:
+                    service = input("Enter the service you want to remove: ")
+                    with open("../data/Service.txt", "r") as file:
+                        service_list = file.readlines()
+                    found = False
+                    index = 0
+                    for line in service_list:
+                        service_data = line.strip().split(",")
+                        if service_data[0] == service:
+                            del service_list[index]
+                            found = True
+                            break
+                        index += 1
+                    if found:
+                        with open("../data/Service.txt", "w") as file:
+                            file.writelines(service_list)
+                        print("Service deleted successfully.")
+                    else:
+                        print("Service not found.")
+                case 4:
+                    break
+                case _:
+                    print("Enter a valid option")
+        except ValueError:
+            print("Invalid choice. Please try again.")
+        except Exception:
+            print("Unknown error occured. Please try again.")
+
+def sys_service_option2():
+    while True:
+        print("""
+    ===========================
+    Manage
+    ===========================
+    What do would u like to do?
+    1.Add
+    2.Update
+    3.Remove
+    4.Exit
+    """)
+        try:
+            option = int(input("Your choice: "))
+            match option:
+                case 1:
+                    while True:
+                        no_found=True
+                        pet=input("Enter service name: ")
                         with open("../data/Service.txt", "r") as file:
                             service_list=file.readlines()
                             for line in service_list:
