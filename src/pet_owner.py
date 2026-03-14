@@ -206,13 +206,21 @@ def request_Booking():
     #index number for each variables
     service_name, service_fee = service[0], service[1]
 
-    payment = input(f"Do you agree to pay Rm {service_fee}? (Paid/Not Paid): ").capitalize()
-    if payment == "Paid":
+    #asks the user to input whether they want to pay or no
+    payment = input(f"Do you agree to pay Rm {service_fee}? (Accept/Decline): ").capitalize()
+
+    #if accepts
+    if payment == "Accept":
+        #display this
         print("Payment made")
-    elif payment == "Not Paid":
-        print("Payment declined")
+    #if does not accept
+    elif payment == "Decline":
+        #display this and end
+        print ("Payment declined")
+        return
     else:
-        print("Invalid Input")
+        print("Invalid Output")
+        return
 
     try:
         #open the file in read mode to check duplicate

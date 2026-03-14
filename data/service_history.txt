@@ -8,3 +8,4 @@
 123,Crush,23-02-2008,Pet Taxi,250,paid,Booked
 123,Crush,25-02-2008,Pet Taxi,250,PAID,Booked
 123,Crush,22-02-2007,HairCut,40,Paid,Booked
+123,Crush,22-02-2008,HairCut,40,Not paid,Booked
