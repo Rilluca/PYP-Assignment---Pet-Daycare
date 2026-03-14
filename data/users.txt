@@ -1,6 +1,4 @@
 Rillu,123
-212,password
-223,221
 Crush,123
 Ayla,123
 Crushes,123
