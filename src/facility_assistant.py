@@ -11,7 +11,7 @@ def add_facility():
 
 def add_alert():
     pet_id=input("Enter Pet ID : ")
-    alert=input("Ener special care / medical alert : ")
+    alert=input("Enter special care / medical alert : ")
 
     file=open("../data/pet.txt","a")
     file.write(f"{pet_id},ALERT, {alert}\n")

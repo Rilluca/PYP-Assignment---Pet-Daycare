@@ -3,6 +3,16 @@
 # - Request bookings or extensions.
 # - View pet service history and invoices.
 
+#Custon function instead of len()
+def count_len(item):
+    #set the initial counter to 0
+    count = 0
+    #loops through every element in the item
+    for _ in item:
+        #increases the counter by 1
+        count += 1
+    return count
+
 #Function to display the available slots
 def grooming_slots():
     #asks the user to enter a date
@@ -25,7 +35,7 @@ def grooming_slots():
                 #remove newline character and split it by commas
                 parts = line.strip().split(",")
                 #check if the line fits the length and same date
-                if len(parts) >=4 and parts[2] == date:
+                if count_len(parts) >=4 and parts[3] == date:
                     #increase booked_slots by 1
                     booked_slots += 1
     #if the file doesn't exist
@@ -87,7 +97,7 @@ def automatic_booking_id():
     #convert the next booking num to str
     num = str(count + 1)
     #while length of num is less than 4
-    while len(num) < 4:
+    while count_len(num) < 4:
         #add 0 in front of the number
         num = "0" + num
     #comebine prefix with num
@@ -98,7 +108,7 @@ def automatic_booking_id():
 #function to validate date format
 def validate_date(date_str):
     #check the length  and dash positions of the fate
-    if len(date_str) != 10 or date_str[2] != "-" or date_str[5] != "-":
+    if count_len(date_str) != 10 or date_str[2] != "-" or date_str[5] != "-":
         return False
 
     #extract day, month , and year
@@ -114,6 +124,59 @@ def validate_date(date_str):
         return False
     #return True if its valid
     return True
+
+#function to display available services and choose them
+def choose_service():
+    #intilialize empty services list
+    services = []
+
+    # read services from file
+    try:
+        #open the file in read mode
+        with open('../data/Service.txt', 'r') as f:
+            #loop through each line
+            for line in f:
+                #split lines by comma
+                parts = line.strip().split(",")
+                #check if valid records
+                if count_len(parts) >= 2:
+                    #add to service list
+                    services = services + [parts]
+    #if file not found error occurs
+    except FileNotFoundError:
+        #notify userr
+        print("Service file not found")
+        #return none if file missing
+        return None
+
+    # Display header for the output
+    print("\nAvailable Services:")
+    #initialize counter
+    i = 1
+    #loop through services
+    for service in services
+        #dsiplay service
+        print(f"{i}. {service[0]} - RM {service[1]}")
+        #increament by 1
+        i += 1
+
+    #Loop until valid choice
+    while True:
+        try:
+            #asks the user to enter their choice
+            choice = int(input("Please enter your choice: "))
+            #validate choice
+            if 1 <= choice <= count_len(services):
+                #get a selected service
+                selected = services[choice - 1]
+                #display the output
+                print(f"You chose: {selected[0]} - RM {selected[1]}")
+                return selected
+            else:
+                print("Invalid choice")
+        #non-int error
+        except ValueError:
+            print("Enter a valid number")
 
 #function to request a booking
 def request_Booking():
@@ -134,6 +197,15 @@ def request_Booking():
         print("Every field must be filled")
         return
 
+    #call choos service
+    service = choose_service()
+    #check if service is selected
+    if not service:
+        #stop if no
+        return
+    #index number for each variables
+    service_name, service_fee = service[0], service[1]
+
     try:
         #open the file in read mode to check duplicate
         with open("../data/booking.txt", "r") as f:
@@ -142,7 +214,7 @@ def request_Booking():
                 #split line data and seperate by comma
                 parts = line.strip().split(",")
                 #check if same pet is already booked on th same date
-                if len(parts) >=4 and parts[2] == date and parts[3] == pet_id:
+                if count_len(parts) >=4 and parts[2] == date and parts[3] == pet_id:
                     #if so, display this
                     print(f"Booking already exists for {pet_id} on {date}")
                     return
@@ -156,13 +228,13 @@ def request_Booking():
         #open booking file in append mode
         with open("../data/booking.txt", "a") as f:
             #create booking record text
-            text = booking_id + "," + name + "," + date + "," + pet_id + "\n"
+            text = f"{booking_id},{name},{pet_id},{date},{service_name},{service_fee}\n"
             #write the text in the file
             f.write(text)
         #open service history file in append mode
         with open("../data/service_history.txt", "a")as f:
             #create service history record text
-            text = pet_id + "," + name + "," + date + "," + "Booked\n"
+            text = f"{pet_id},{name},{date},{service_name},{service_fee},Booked\n"
             #write the text in the file
             f.write(text)
 
@@ -173,6 +245,8 @@ def request_Booking():
             print(f"Owner Name      : {name} ")
             print(f"Pet ID          : {pet_id} ")
             print(f"Booking Date    : {date} ")
+            print(f"Service Name    : {service_name} ")
+            print(f"Service Fee     : RM {service_fee} ")
             print("="*30 + "\n")
             print ("Booking request successful")
 
@@ -203,7 +277,7 @@ def automatic_request_extension():
     #convert next number to string
     num = str(count + 1)
     #add zero numbers at the start until length becomes greater or equal to 4
-    while len(num) < 4:
+    while count_len(num) < 4:
         num = "0" + num
     #add E in front of extension id numerical number
     extension_id = "E" + num
@@ -215,7 +289,7 @@ def request_extension():
     #asks the user to enter a booking ID
     booking_id = input("Please enter your Booking ID:")
     #asks the user to enter an extension date
-    extension_date = input("Please enter your extension time:")
+    extension_date = input("Please enter your extension date:")
     #if the date does not follow the format
     if not validate_date(extension_date):
         #display this
@@ -365,9 +439,11 @@ def view_service_history():
                     #split record data and seperate by comma
                     parts = line.strip().split(",")
                     #check if the name matches
-                    if len(parts) >= 4 and parts[1].strip().lower() == name:
+                    if count_len(parts) >= 4 and parts[1].strip().lower() == name:
                         #display service history
-                        print(f"Pet ID: {parts[0]} | Owner Name: {parts[1]} | Service Date: {parts[2]} | Status: {parts[3]}")
+                        status = parts[5] if count_len(parts) > 5 else 'Booked'
+                        print(f"Pet ID: {parts[0]} | Owner Name: {parts[1]} | Service Date: {parts[2]} |"
+                              f"Service Name: {parts[3]} | Service Fee: RM {parts[4]} | Status: {status} ")
                         #record found flagged
                         Result = True
                 #if no records are found
@@ -378,6 +454,7 @@ def view_service_history():
         except FileNotFoundError:
             #display this
             print("File not found")
+
 
 #funcion to ask users whether to contineu or back to the menu
 def continue_or_menu():
@@ -396,7 +473,8 @@ def continue_or_menu():
             #if user enters anything else, display this
             print("Invalid choice")
 
-#main pet owner menu funciton
+
+#main pet owner menu function
 def pet_owner_menu():
     #control variable
     menu = True
