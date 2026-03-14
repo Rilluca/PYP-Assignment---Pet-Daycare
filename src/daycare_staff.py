@@ -552,3 +552,72 @@ def remove_records():
             valid_choice = True
         else:
             print("Invalid input, please try again.")
+
+# Function to generate and display a summary report of all services
+def generate_summary_report():
+    print('=' * 50)
+    print("Service Summary Report")
+    print('=' * 50)
+
+    # Read the current records
+    with open("../data/care_records.txt", "r") as f:
+        record_list = f.readlines()
+
+    # Initialize counters
+    total_records = count_len(record_list)
+
+    # Counters for Care Types
+    feeding_count = 0
+    grooming_count = 0
+    activities_count = 0
+
+    # Counters for Status
+    pending_count = 0
+    inprogress_count = 0
+    done_count = 0
+
+    # Process data through the list
+    for record in record_list:
+        # Split the line into data components
+        # Format: PetID, PetName, CareType, Status, Date
+        data = record.strip().split(",")
+
+        # Count Care Types (Index 2)
+        if data[2] == "Feeding":
+            feeding_count += 1
+        elif data[2] == "Grooming":
+            grooming_count += 1
+        elif data[2] == "Activities":
+            activities_count += 1
+
+        # Count Status (Index 3)
+        if data[3] == "Pending":
+            pending_count += 1
+        elif data[3] == "In-progress":
+            inprogress_count += 1
+        elif data[3] == "Done":
+            done_count += 1
+
+    # Display the summary results
+    print(f"Total Services Logged: {total_records}")
+    print("-" * 50)
+    print("Breakdown by Care Type:")
+    print(f"- Feeding    : {feeding_count}")
+    print(f"- Grooming   : {grooming_count}")
+    print(f"- Activities : {activities_count}")
+    print("-" * 50)
+    print("Breakdown by Status:")
+    print(f"- Pending    : {pending_count}")
+    print(f"- In-progress: {inprogress_count}")
+    print(f"- Done       : {done_count}")
+    print("=" * 50)
+
+    # Navigation loop to return to main menu
+    valid_choice = False
+    while not valid_choice:
+        choice = input("\nPress 'Y' to return to the Staff Menu: ")
+        if choice == 'y' or choice == 'Y':
+            show_daycare_staff_menu()
+            valid_choice = True
+        else:
+            print("Invalid input, please try again.")
