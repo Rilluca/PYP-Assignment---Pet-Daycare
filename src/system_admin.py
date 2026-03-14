@@ -3,7 +3,12 @@
 # - View all data (owners, pets, bookings, payments).
 # - Generate overall service report (total bookings, revenue, available slots).
 from src.booking_officer import automatic_pet_id
-
+def check_alphabet(x):
+    is_alphabet = True
+    for c in x:
+        if not ((c >= "a" and c <= "z" ) or (c >= "A" and c <= "Z")):
+            is_alphabet = False
+    return is_alphabet
 
 def sys_viewdata():
     while True:
@@ -36,7 +41,7 @@ def sys_viewdata():
                                         for line in pet_list:
                                             pet_data=line.strip().split(",")
                                             if pet_data[0]==credentials[0]:
-                                                print("Pet-",pet_data[2], "(",pet_data[1],")",end="\n\n1")
+                                                print("Pet-",pet_data[2], "(",pet_data[1],")",end="\n\n")
                                                 not_found=False
                                     if not_found==True:
                                         print("No pet found for this user data\n")
@@ -45,20 +50,26 @@ def sys_viewdata():
                             with open("../data/pet.txt", "r") as file:
                                 pet_list = file.readlines()
                                 for line in pet_list:
-                                    pet_list = line.strip().split(",")
-                                    print("Pet_Id-",pet_list[1],end="\n")
-                                    print("Pet-",pet_list[2],end="\n")
-                                    print("Pet Owner-",pet_list[0],end="\n\n")
+                                    pet_data = line.strip().split(",")
+                                    print("Pet_Id-",pet_data[1],end="\n")
+                                    print("Pet-",pet_data[2],end="\n")
+                                    print("Pet Owner-",pet_data[0],end="\n\n")
                         case 3:
                             with open("../data/booking.txt", "r") as file:
                                 booking_list = file.readlines()
                                 for line in booking_list:
-                                    booking_list = line.strip().split(",")
-                                    print("Booking ID-",booking_list[0],end="\n")
-                                    print("Username-",booking_list[1],end="\n")
-                                    print("Date-",booking_list[2],end="\n\n")
+                                    booking_data = line.strip().split(",")
+                                    print("Booking ID-",booking_data[0],end="\n")
+                                    print("Username-",booking_data[1],end="\n")
+                                    print("Date-",booking_data[2],end="\n\n")
                         case 4:
-                            print("payments")
+                            with open("../data/booking.txt", "r") as file:
+                                payment_list = file.readlines()
+                                for line in payment_list:
+                                    payment_data = line.strip().split(",")
+                                    print("Username-",payment_data[1],end="\n")
+                                    print("Date-",payment_data[2],end="\n\n")
+
                         case 5:
                             print("Exiting program")
                             break
@@ -87,7 +98,7 @@ def sys_manage():
                 case 1:
                     sys_service_option1()
                 case 2:
-                    sys_manage()
+                    sys_service_option2()
                 case 3:
                     break
                 case _:
@@ -134,15 +145,15 @@ def sys_service_option1():
                         else:
                             break
                     with open("../data/Service.txt", "a+") as file:
-                        file.write(f"{service},{payment}")
+                        file.write(f"{service},{payment}\n")
                     print("Added")
                 case 2:
                     service=input("Enter service to update: ")
                     with open("../data/Service.txt", "r") as file:
-                        Service_list = file.readlines()
+                        service_list = file.readlines()
                     found = False
                     index = 0  # manual counter
-                    for line in Service_list:
+                    for line in service_list:
                         service_data = line.strip().split(",")
                         if service_data[0] == service:
                             found = True
@@ -150,26 +161,27 @@ def sys_service_option1():
                             field = input("Which field to update? (service name/price): ").lower()
                             if field == "service name":
                                 service_data[0] = input("Enter Service option ")
-                                print("service Name updated successfully.")
+                                print("Service Name updated successfully.")
                             elif field == "price":
                                 while True:
                                     try:
                                         payment = int(input("Enter price: "))
+                                        payment = str(payment)
                                     except ValueError:
                                         print("Enter valid price")
                                     else:
                                         break
-                                service_data[1] = payment
+                                service_data[1]= payment
                                 print("Service price updated successfully.")
                             else:
                                 print("Invalid field.")
-                            Service_list[index] = ",".join(service_data) + "\n"
+                            service_list[index] = ",".join(service_data) + "\n"
                             break
                         index += 1
-                        if not found:
-                            print("Service name not found.")
-                        with open("../data/Service.txt", "w") as file:
-                            file.writelines(Service_list)
+                    if not found:
+                        print("Service name not found.")
+                    with open("../data/Service.txt", "w") as file:
+                        file.writelines(service_list)
                 case 3:
                     service = input("Enter the service you want to remove: ")
                     with open("../data/Service.txt", "r") as file:
@@ -214,66 +226,71 @@ def sys_service_option2():
             option = int(input("Your choice: "))
             match option:
                 case 1:
-
-
-                    pet=input("Enter pet name: ")
+                    username=input("Enter name")
+                    while True:
+                            pet=input("Enter pet name: ")
+                            check_alpha=check_alphabet(pet)
+                            if check_alpha==True:
+                                break
+                            else:
+                                print("A pet name can only contain alphabets")
                     pet_ID=automatic_pet_id()
-                    with open("../data/Service.txt", "a+") as file:
-                        file.write(f"{username},{pet_ID},{pet},{password}")
+                    with open("../data/pet.txt", "a") as file:
+                        file.write(f"{username},{pet_ID},{pet}\n")
                     print("Added")
                 case 2:
-                    service=input("Enter service to update: ")
-                    with open("../data/Service.txt", "r") as file:
-                        Service_list = file.readlines()
+                    PetID=input("Enter pet ID to update: ")
+                    with open("../data/pet.txt", "r") as file:
+                        pet_list = file.readlines()
                     found = False
                     index = 0  # manual counter
-                    for line in Service_list:
-                        service_data = line.strip().split(",")
-                        if service_data[0] == service:
+                    for line in pet_list:
+                        pet_data = line.strip().split(",")
+                        if pet_data[1] == PetID:
                             found = True
-                            print("Current data:", service_data)
-                            field = input("Which field to update? (service name/price): ").lower()
-                            if field == "service name":
-                                service_data[0] = input("Enter Service option ")
-                                print("service Name updated successfully.")
-                            elif field == "price":
+                            print("Current data:", pet_data)
+                            field = input("What would u like to update? pet(or)petowner/username): ").lower()
+                            if field == "pet":
                                 while True:
-                                    try:
-                                        payment = int(input("Enter price: "))
-                                    except ValueError:
-                                        print("Enter valid price")
-                                    else:
+                                    pet =(input("Enter pet: "))
+                                    isalpha=check_alphabet(pet)
+                                    if isalpha==True:
                                         break
-                                service_data[1] = payment
-                                print("Service price updated successfully.")
+                                    else:
+                                        print("A pet name can only contain alphabets")
+                                pet_data[2] = pet
+                                print("pet name updated successfully.")
+                            elif field == "username" or field== "petowner":
+                                username=input("Enter username: ")
+                                pet_data[0] = username
                             else:
-                                print("Invalid field.")
-                            Service_list[index] = ",".join(service_data) + "\n"
+                                print("Invalid input.")
+                            pet_list[index] = ",".join(pet_data) + "\n"
                             break
                         index += 1
-                        if not found:
-                            print("Service name not found.")
-                        with open("../data/Service.txt", "w") as file:
-                            file.writelines(Service_list)
+                    if not found:
+                        print("Pet ID not found.")
+                    with open("../data/pet.txt", "w") as file:
+                        file.writelines(pet_list)
                 case 3:
-                    service = input("Enter the service you want to remove: ")
-                    with open("../data/Service.txt", "r") as file:
-                        service_list = file.readlines()
+                    PetID = input("Enter pet ID you want to remove: ")
+                    with open("../data/pet.txt", "r") as file:
+                        pet_list = file.readlines()
                     found = False
                     index = 0
-                    for line in service_list:
-                        service_data = line.strip().split(",")
-                        if service_data[0] == service:
-                            del service_list[index]
+                    for line in pet_list:
+                        pet_data = line.strip().split(",")
+                        if pet_data[1] == PetID:
+                            del pet_list[index]
                             found = True
                             break
                         index += 1
                     if found:
-                        with open("../data/Service.txt", "w") as file:
-                            file.writelines(service_list)
-                        print("Service deleted successfully.")
+                        with open("../data/pet.txt", "w") as file:
+                            file.writelines(pet_list)
+                        print("Pet record deleted successfully.")
                     else:
-                        print("Service not found.")
+                        print("Pet ID not found.")
                 case 4:
                     break
                 case _:
@@ -284,10 +301,58 @@ def sys_service_option2():
             print("Unknown error occured. Please try again.")
 
 
+def sys_summary():
+    with open("../data/pet.txt", "r") as file:
+        count=0
+        for line in file:
+            count=count+1
+        pet_amount=count
+    with open("../data/booking.txt", "r") as file:
+        count=0
+        for line in file:
+            count=count+1
+            booking_amount=count
+    with open("../data/users.txt", "r") as file:
+        count=0
+        for line in file:
+            count=count+1
+            user_amount=count
+    with open("../data/slots.txt", "r") as file:
+        count=0
+        for line in file:
+            count=count+1
+            used_slot=count
+            if used_slot<10:
+                available_slot=10-used_slot
+            elif used_slot==10:
+                available_slot="full"
+            else:
+                available_slot="Error"
+    with open("../data/booking.txt", "r") as file:
+        total=0
+        for line in file:
+            data=line.strip.split(",")
+            price=int(data[0])
+            total=total+data
+    print(f"""
+    ============================
+    Service System Report
+    ============================
+
+    Total Pet Owners/Users: {user_amount}
+    Total Pets Registered: {pet_amount}
+    Total Bookings: {booking_amount}
+
+    Total Revenue: RM {total}
+    -----------
+    Slot info
+    -----------
+    Max slot=10
+    Taken slot={used_slot}
+    Available slot: {available_slot} 
+    """)
 
 
-def sys_summery():
-    print("smth")
 
 def show_sys_admin_menu():
     while True:
@@ -310,7 +375,7 @@ def show_sys_admin_menu():
                     sys_manage()
                     break
                 case 3:
-                    sys_summery()
+                    sys_summary()
                     break
                 case 4:
                     break
@@ -320,4 +385,5 @@ def show_sys_admin_menu():
             print("Invalid choice. Please try again.")
         except Exception:
             print("Unknown error occured. Please try again.")
+
 show_sys_admin_menu()
