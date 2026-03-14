@@ -2,6 +2,8 @@
 # - Manage pet records and service options (add, update, remove).
 # - View all data (owners, pets, bookings, payments).
 # - Generate overall service report (total bookings, revenue, available slots).
+from src.booking_officer import automatic_pet_id
+
 
 def sys_viewdata():
     while True:
@@ -212,28 +214,12 @@ def sys_service_option2():
             option = int(input("Your choice: "))
             match option:
                 case 1:
-                    while True:
-                        no_found=True
-                        pet=input("Enter service name: ")
-                        with open("../data/Service.txt", "r") as file:
-                            service_list=file.readlines()
-                            for line in service_list:
-                                service_data = line.strip().split(",")
-                                if service==service_data[0]:
-                                    print("Service already exists")
-                                    no_found= False
-                                    break
-                        if no_found== True:
-                            break
-                    while True:
-                        try:
-                            payment=int(input("Enter payment number: "))
-                        except ValueError:
-                            print("Enter valid price")
-                        else:
-                            break
+
+
+                    pet=input("Enter pet name: ")
+                    pet_ID=automatic_pet_id()
                     with open("../data/Service.txt", "a+") as file:
-                        file.write(f"{service},{payment}")
+                        file.write(f"{username},{pet_ID},{pet},{password}")
                     print("Added")
                 case 2:
                     service=input("Enter service to update: ")
