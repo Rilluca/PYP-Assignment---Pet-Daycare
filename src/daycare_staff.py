@@ -50,7 +50,7 @@ def show_daycare_staff_menu():
                     valid_choice = True
 
                 case 3:
-                    print("generate summary report function")
+                    generate_summary_report()
                     valid_choice = True
 
                 case 4:
@@ -86,7 +86,7 @@ def show_pet_care_menu():
                     valid_choice = True
 
                 case 3:
-
+                    remove_records()
                     valid_choice = True
 
                 case 4:
@@ -142,7 +142,7 @@ def strip_lines(s):
     return s
 
 # Function to validate date format
-# Source:
+# Source: Selected Topics in IT, 2023, Python 66: Date validation, verify correct date range and format (YYYY-MM-DD), YouTube
 def validate_date(status):
     while True:
         date_input = input("Enter Date (dd/mm/yyyy): ")
@@ -377,7 +377,8 @@ def fetch_records():
         menu_index = 1
 
         for record in record_list:
-            record_data = record.strip().split(",")
+            strip_record_data = strip_lines(record)
+            record_data = split_list(strip_record_data)
 
             # Print the data into specific format
             print(f"{menu_index:<3} | {record_data[1]:<8} | {record_data[0]:12} | {record_data[2]:12} | {record_data[3]:12} | {record_data[4]:12}")
@@ -422,7 +423,7 @@ def update_records():
     valid_choice = False
     while not valid_choice:
         try:
-            choice = int(input("\nChoose a record to update: "))
+            choice = int(input("Choose a record to update: "))
 
             # Check if input is within the length of the txt file
             if 1 <= choice <= len(record_list):
@@ -432,7 +433,7 @@ def update_records():
                 selected_pet_data = selected_pet.strip().split(",")
                 valid_choice = True
             else:
-                print("Number out of range, please try again.")
+                print("Number out of range, please try again.\n")
 
         except ValueError:
             print("Invalid input, please try again.\n")
@@ -509,30 +510,27 @@ def remove_records():
     valid_choice = False
     while not valid_choice:
         try:
-            choice = int(input("\nEnter the 'No' of the record you wish to REMOVE: "))
+            choice = int(input("\nChoose a record that you would like to remove: "))
 
             if 1 <= choice <= len(record_list):
-                # Confirm deletion
-                confirm = input(f"Are you sure you want to delete record {choice}? (y/n): ")
+                valid_confirm = False
+                while not valid_confirm:
+                    confirm = input(f"Are you sure you want to delete record {choice}? (y/n): ")
 
-                if confirm == 'y' or confirm == 'Y':
-                    # Use list slicing to remove the item
-                    record_list[choice - 1: choice] = []
-
-                    # Write the updated list back to the file
-                    with open("../data/care_records.txt", "w") as f:
-                        for record in record_list:
-                            f.write(record)
-
-                    print("\nRecord removed successfully!")
-                    valid_choice = True
-
-                elif confirm == 'n' or confirm == 'N':
-                    print("\nDeletion cancelled.")
-                    valid_choice = True
-                else:
-                    print("Invalid input, please enter 'y' or 'n'.")
-
+                    if confirm == 'y' or confirm == 'Y':
+                        record_list[choice - 1: choice] = []
+                        with open("../data/care_records.txt", "w") as f:
+                            for record in record_list:
+                                f.write(record)
+                        print("\nRecord removed successfully!")
+                        valid_confirm = True
+                        valid_choice = True
+                    elif confirm == 'n' or confirm == 'N':
+                        print("\nDeletion cancelled.")
+                        valid_confirm = True
+                        valid_choice = True
+                    else:
+                        print("Invalid input, please enter 'y' or 'n'.\n")
             else:
                 print("Number out of range, please try again.")
 
@@ -615,7 +613,7 @@ def generate_summary_report():
     # Navigation loop to return to main menu
     valid_choice = False
     while not valid_choice:
-        choice = input("\nPress 'Y' to return to the Staff Menu: ")
+        choice = input("\nPress 'Y' to return to the previous menu: ")
         if choice == 'y' or choice == 'Y':
             show_daycare_staff_menu()
             valid_choice = True

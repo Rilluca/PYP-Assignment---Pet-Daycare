@@ -682,5 +682,3 @@ def show_sys_admin_menu():
 
         except Exception:
             print("Unknown error occured. Please try again.")
-
-show_sys_admin_menu()
