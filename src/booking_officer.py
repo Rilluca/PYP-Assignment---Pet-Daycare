@@ -82,7 +82,7 @@ def register_new_pet_owner():
     with open("../data/users.txt", "r") as file:
         for line in file:
             if line.strip().split(",")[0] == username:
-                return "Username is already taken."
+                print("Username is already taken.")
 
     # Open file in append mode to add in new users
     with open("../data/users.txt", "a") as file:
@@ -101,6 +101,7 @@ def register_new_pet():
             break
     if not is_alphabet:
         return "Username can only contain alphabets"
+
 
     is_alphabet = True
     for c in pet_name:
