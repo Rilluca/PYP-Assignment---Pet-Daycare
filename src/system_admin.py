@@ -588,6 +588,7 @@ def sys_service_option2():
                             found = True
                             break
 
+
                         index += 1
 
                     if found:
