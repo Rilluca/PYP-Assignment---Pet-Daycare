@@ -27,7 +27,7 @@ def add_alert():
     print("Alert added")
 
 
-# -------- 3. Notify overdue pickups / special request --------
+# -------- 3. Check overdue bookings --------
 def check_overdue():
 
     today = datetime.date.today()
@@ -46,39 +46,47 @@ def check_overdue():
 
             data = booking.strip().split(",")
 
-            # expected format
-            # BK0001,Crush,24-02-2008,123
-
-            if len(data) < 4:
+            # your file has many columns
+            if len(data) < 7:
                 continue
 
             booking_id = data[0]
             pet_name = data[1]
-            date_str = data[2]
-            special = data[3]
 
-            pickup_date = datetime.datetime.strptime(
-                date_str,
-                "%d-%m-%Y"
-            ).date()
+            date_str = data[3]      # correct date index
+            service = data[4]       # haircut / daycare etc
+            note = data[6]          # last column
 
-            # ✅ overdue condition
+            try:
+                pickup_date = datetime.datetime.strptime(
+                    date_str,
+                    "%d-%m-%Y"
+                ).date()
+            except:
+                print("Wrong date format:", date_str)
+                continue
+
+            # overdue check
             if pickup_date < today:
                 print("Overdue pickup!")
                 print("Booking:", booking_id)
                 print("Pet:", pet_name)
                 print("Date:", date_str)
 
-            # ✅ special request condition
-            if special != "":
-                print("Special request:", special)
+            # special / service
+            if service != "":
+                print("Service:", service)
+
+            # note
+            if note != "":
+                print("Note:", note)
 
             print("--------------------")
 
         file.close()
 
     except FileNotFoundError:
-        print("No bookings found")
+        print("booking.txt file not found")
 
 
 # -------- MENU --------
@@ -108,3 +116,8 @@ def main_menu():
 
         else:
             print("Invalid choice")
+
+
+# -------- RUN --------
+if __name__ == "__main__":
+    main_menu()
