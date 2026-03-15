@@ -112,7 +112,7 @@ def sys_viewdata():
                                 credential_list = file.readlines()
                                 for line in credential_list:
                                     credentials = manual_strip(line)
-                                    credentials = manual_spilt(line,",")
+                                    credentials = manual_spilt(credentials, ",")
                                     print("User/pet owner-",credentials[0],end="\n")
                                     print("User\'s password-",credentials[1],end="\n\n")
                                     with open("../data/pet.txt", "r") as file:
@@ -120,9 +120,9 @@ def sys_viewdata():
                                         not_found = True
                                         for line in pet_list:
                                             pet_data= manual_strip(line)
-                                            pet_data= manual_spilt(line, ",")
+                                            pet_data= manual_spilt(pet_data, ",")
                                             if pet_data[0]==credentials[0]:
-                                                print("Pet-",pet_data[2], "(",pet_data[1],")",end="\n\n")
+                                                print("Pet-",pet_data[2], "(",pet_data[1],")",end="\n")
                                                 not_found=False
                                     if not_found==True:
                                         print("No pet found for this user data\n")
@@ -133,7 +133,7 @@ def sys_viewdata():
                                 pet_list = file.readlines()
                                 for line in pet_list:
                                     pet_data = manual_strip(line)
-                                    pet_data = manual_spilt(line, ",")
+                                    pet_data = manual_spilt(pet_data, ",")
                                     print("Pet_Id-",pet_data[1],end="\n")
                                     print("Pet-",pet_data[2],end="\n")
                                     print("Pet Owner-",pet_data[0],end="\n\n")
@@ -144,7 +144,7 @@ def sys_viewdata():
                                 booking_list = file.readlines()
                                 for line in booking_list:
                                     booking_data = manual_strip(line)
-                                    booking_data = manual_spilt(line, ",")
+                                    booking_data = manual_spilt(booking_data, ",")
                                     print("Booking ID-",booking_data[0],end="\n")
                                     print("Username-",booking_data[1],end="\n")
                                     print("Date-",booking_data[2],end="\n\n")
@@ -155,15 +155,17 @@ def sys_viewdata():
                                 payment_list = file.readlines()
                                 for line in payment_list:
                                     payment_data = manual_strip(line)
-                                    payment_data_data = manual_spilt(line, ",")
+                                    payment_data = manual_spilt(payment_data, ",")
                                     print("Username-",payment_data[1],end="\n")
                                     print("Date-",payment_data[2],end="\n")
                                     print("Status-",payment_data[5],end="\n")
                                     print("Payment- RM", payment_data[4],end="\n\n")
 
                         case 5:
+
                             print("Exiting program")
                             break
+
               else:
                     print("Enter a valid option")
         except ValueError:
@@ -228,7 +230,7 @@ def sys_service_option1():
                             service_list=file.readlines()
                             for line in service_list:
                                 service_data = manual_strip(line)
-                                service_data = manual_spilt(line, ",")
+                                service_data = manual_spilt(service_data, ",")
                                 if service==service_data[0]:
                                     print("Service already exists")
                                     no_found= False
@@ -253,7 +255,7 @@ def sys_service_option1():
                     index = 0  # manual counter
                     for line in service_list:
                         service_data = manual_strip(line)
-                        service_data = manual_spilt(line, ",")
+                        service_data = manual_spilt(service_data, ",")
                         if service_data[0] == service:
                             found = True
                             print("Current data:", service_data)
@@ -297,7 +299,7 @@ def sys_service_option1():
                     index = 0
                     for line in service_list:
                         service_data = manual_strip(line)
-                        service_data = manual_spilt(line, ",")
+                        service_data = manual_spilt(service_data, ",")
                         if service_data[0] == service:
                             del service_list[index]
                             found = True
@@ -360,7 +362,7 @@ def sys_service_option2():
                     index = 0  # manual counter
                     for line in pet_list:
                         pet_data = manual_strip(line)
-                        pet_data = manual_spilt(line, ",")
+                        pet_data = manual_spilt(pet_data, ",")
                         if pet_data[1] == PetID:
                             found = True
                             print("Current data:", pet_data)
@@ -402,7 +404,7 @@ def sys_service_option2():
                     index = 0
                     for line in pet_list:
                         pet_data = manual_strip(line)
-                        pet_data = manual_spilt(line, ",")
+                        pet_data = manual_spilt(pet_data, ",")
                         if pet_data[1] == PetID:
                             del pet_list[index]
                             found = True
@@ -424,38 +426,48 @@ def sys_service_option2():
             print("Unknown error occured. Please try again.")
 
 def sys_summary():
+
     with open("../data/pet.txt", "r") as file:
         count=0
         for line in file:
             count=count+1
         pet_amount=count
+
     with open("../data/booking.txt", "r") as file:
         count=0
         for line in file:
             count=count+1
             booking_amount=count
+
     with open("../data/users.txt", "r") as file:
         count=0
         for line in file:
             count=count+1
             user_amount=count
+
     with open("../data/slots.txt", "r") as file:
         count=0
         for line in file:
+
             count=count+1
             used_slot=count
+
             if used_slot<10:
                 available_slot=10-used_slot
+
             elif used_slot==10:
                 available_slot="full"
+
             else:
                 available_slot="Error"
+
         used_slot=count
+
     with open("../data/service_history.txt", "r") as file:
         total=0
         for line in file:
             data = manual_strip(line)
-            data = manual_spilt(line, ",")
+            data = manual_spilt(data, ",")
             price=data[4]
             price=float(price)
             total=total+price
@@ -478,9 +490,10 @@ def sys_summary():
     """)
 
 def show_sys_admin_menu():
+
     while True:
         print("""
-    ==========  =================
+    ===========================
     System admin menu
     ===========================
     What would you like to do?
@@ -489,21 +502,28 @@ def show_sys_admin_menu():
     3. Generate overall service report
     4. Exit
         """)
+
         try:
             option = int(input("Your choice: "))
             match option:
                 case 1:
                     sys_viewdata()
+
                 case 2:
                     sys_manage()
+
                 case 3:
                     sys_summary()
+
                 case 4:
                     break
+
                 case _:
                     print("Enter a valid option")
+
         except ValueError:
             print("Invalid choice. Please try again.")
+
         except Exception:
             print("Unknown error occured. Please try again.")
 
