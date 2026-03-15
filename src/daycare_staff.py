@@ -146,8 +146,9 @@ def custom_split(string):
 # Custom function to strip "\n" after splitting each word in lines
 # Source: Yolanda, 2016, Implement my own strip method in Python, Stack Overflow
 def custom_strip(string):
-    # If the last character is a newline, slice it off
+    # Make sure string is not empty, get the last character of the string and check if it's newlines
     if count_len(string) > 0 and string[count_len(string) - 1] == '\n':
+        # Use slicing to slice from the start up to the last character excluding newlines
         return string[0:count_len(string) - 1]
     return string
 
