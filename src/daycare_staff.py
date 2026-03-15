@@ -114,67 +114,79 @@ def count_len(ori_list):
 # Custom function to append to list
 # Source: from Lecturer Miss Chong Mien May
 def append_to_end(ori_list, item_to_append):
+    # Use slicing method to append items at the end of the list
+    # Because index = length - 1, when we slice to an empty index, we can append the item behind
     ori_list[count_len(ori_list):count_len(ori_list)] = [item_to_append]
     return ori_list
 
-# Custom function to split list
-# Source: Yolanda, 2016, Implement my own strip method in Python, Stack Overflow
-def split_list(string):
+# Custom function to split words into list
+# Source: An Yan, 2018, How to write my own split function without using .split and .strip function?, Stack Overflow
+def custom_split(string):
+    # List to hold split words
     split_list = []
+    # To build each word by word
     word = ""
 
     for c in string:
-        if c not in (","):
+        # If current character is not the delimiter
+        if c not in ",":
+            # Add current character to word if it's not a delimiter
             word += c
         else:
+            # Append the word into split_list
             split_list = append_to_end(split_list, word)
+            # Reset so previous word doesn't linger
             word = ""
 
+    # Append the last word to list because there is no delimiter at the end of the string
     split_list = append_to_end(split_list, word)
+
     return split_list
 
-# Custom function to strip "\n" when reading lines in file as list
-# Source: An Yan, 2018, How to write my own split function without using .split and .strip function?, Stack Overflow
-def strip_lines(s):
+# Custom function to strip "\n" after splitting each word in lines
+# Source: Yolanda, 2016, Implement my own strip method in Python, Stack Overflow
+def custom_strip(string):
     # If the last character is a newline, slice it off
-    if count_len(s) > 0 and s[count_len(s) - 1] == '\n':
-        return s[0:count_len(s) - 1]
-    return s
+    if count_len(string) > 0 and string[count_len(string) - 1] == '\n':
+        return string[0:count_len(string) - 1]
+    return string
 
 # Function to validate date format
 # Source: Selected Topics in IT, 2023, Python 66: Date validation, verify correct date range and format (YYYY-MM-DD), YouTube
-def validate_date(status):
+def validate_date():
     while True:
         date_input = input("Enter Date (dd/mm/yyyy): ")
 
-        # Check length and separator
+        # Check the format of the date by length and separator
+        # Must be exactly 10 characters and have '/' at position index 2 and 5
         if count_len(date_input) != 10 or date_input[2] != '/' or date_input[5] != '/':
             print("Invalid format. Please use dd/mm/yyyy (e.g., 13/03/2026).\n")
             continue
 
-        # Extract substrings by using slicing
-        d_str = date_input[0:2]
-        m_str = date_input[3:5]
-        y_str = date_input[6:10]
+        # Extract date, month and year by slicing
+        day = date_input[0:2]
+        month = date_input[3:5]
+        year = date_input[6:10]
 
         # Manual digit validation
         is_all_digits = True
 
         # Combine them to check all characters in one loop
-        for char in (d_str + m_str + y_str):
-            # Using the range comparison
-            if not ('0' <= char <= '9'):
+        for char in (day + month + year):
+            # Using range comparison
+            if char < '0' or char > '9':
                 is_all_digits = False
                 break
 
+        # If date does not contain numbers
         if not is_all_digits:
-            print("Date parts must only contain numbers.\n")
+            print("Date can only contain numbers.\n")
             continue
 
         # Convert strings to integers for range validation
-        day = int(d_str)
-        month = int(m_str)
-        year = int(y_str)
+        day = int(day)
+        month = int(month)
+        year = int(year)
 
         # Check year
         if not (1900 <= year <= 2100):
@@ -191,32 +203,29 @@ def validate_date(status):
             print("Day must be between 01 and 31.\n")
             continue
 
-        # Specific month logic
-        if month in [4, 6, 9, 11] and day > 30:
-            print("That month only has 30 days.\n")
+        # Specific logic for month with 30 days
+        if (month in 4, 6, 9, 11) and day > 30:
+            print("This month only has 30 days.\n")
             continue
+
+        # Specific logic for February
         if month == 2:
             # Check if it's a leap year
             is_leap = (year % 4 == 0) and (year % 100 != 0 or year % 400 == 0)
 
-            if is_leap:
-                if day >= 30:
-                    print("February must be between 01 and 29 only.\n")
-                    continue
-                elif day > 29:
-                    print(f"{year} is a leap year. February only has 29 days.\n")
-                    continue
-            else:
-                if day >= 30:
-                    print("February must be between 01 and 29 only.\n")
-                    continue
-                elif day > 28:
-                    print(f"{year} is not a leap year. February only has 28 days.\n")
-                    continue
-            # If all checks pass, return the valid string
+            # If it's a leap year
+            if is_leap and day > 29:
+                print(f"{year} is a leap year. February on leap year only has 29 days.")
+                continue
+
+            # If it's not a leap year
+            if not is_leap and day > 28:
+                print(f"{year} is not a leap year. February on leap year only has 28 days.")
+
+        # Return to the input
         return date_input
 
-# Function for selecting the pet for add_care_menu
+# Function for selecting the pet for add_care_menu (this one is only for specific data)
 # Source: hjames, 2013, Extract a column from text file - Python, Stack Overflow
 def select_pet():
     with open("../data/pet.txt", "r") as f:
@@ -227,10 +236,12 @@ def select_pet():
 
         print(f"{'No':<3} | {'Pet ID':<8} | {'Pet Name':12}")
 
+        # Read each pet in pet_list and then split and strip them
         for pet in pet_list:
-            split_pet_data = split_list(pet)
-            pet_data = strip_lines(split_pet_data)
+            strip_pet_data = custom_strip(pet)
+            pet_data = custom_split(strip_pet_data)
 
+            # Get specific data column from text file to print
             print(f"{menu_index:<3} | {pet_data[1]:<8} | {pet_data[2]:12}")
 
             # Numbering will increase for each loop of data
@@ -246,8 +257,10 @@ def select_pet():
             if 1 <= choice <= len(pet_list):
                 # Choice = index - 1
                 selected_pet = pet_list[choice - 1]
-                # Split the selected line
-                selected_pet_data = selected_pet.strip().split(",")
+
+                # Split and strip the selected line
+                strip_pet_data = custom_strip(selected_pet)
+                selected_pet_data = custom_split(strip_pet_data)
                 valid_choice = True
 
                 # Return back pet name and pet ID because that's what we only need now
@@ -368,7 +381,7 @@ def add_care_menu():
         else:
             print("Invalid input, please try again.")
 
-# Function to hold record viewing
+# Function to hold record viewing (this one is to show all the data in the text file)
 def fetch_records():
     with open("../data/care_records.txt", "r") as f:
         record_list = f.readlines()
@@ -377,8 +390,8 @@ def fetch_records():
         menu_index = 1
 
         for record in record_list:
-            strip_record_data = strip_lines(record)
-            record_data = split_list(strip_record_data)
+            strip_record_data = custom_strip(record)
+            record_data = custom_split(strip_record_data)
 
             # Print the data into specific format
             print(f"{menu_index:<3} | {record_data[1]:<8} | {record_data[0]:12} | {record_data[2]:12} | {record_data[3]:12} | {record_data[4]:12}")
@@ -423,14 +436,16 @@ def update_records():
     valid_choice = False
     while not valid_choice:
         try:
-            choice = int(input("Choose a record to update: "))
+            choice = int(input("\nChoose a record to update: "))
 
             # Check if input is within the length of the txt file
             if 1 <= choice <= len(record_list):
                 # Choice = index - 1
                 selected_pet = record_list[choice - 1]
-                # Split the selected line
-                selected_pet_data = selected_pet.strip().split(",")
+
+                # Strip and split the selected line
+                strip_selected_pet = custom_strip(selected_pet)
+                selected_pet_data = custom_split(strip_selected_pet)
                 valid_choice = True
             else:
                 print("Number out of range, please try again.\n")
@@ -438,13 +453,13 @@ def update_records():
         except ValueError:
             print("Invalid input, please try again.\n")
 
-    print(f"\nUpdate Status (Current Status: {selected_pet_data[3]})")
-    print("1. Pending")
-    print("2. In-progress")
-    print("3. Done")
+    valid_choice = False
+    while not valid_choice:
+        print(f"\nUpdate Status (Current Status: {selected_pet_data[3]})")
+        print("1. Pending")
+        print("2. In-progress")
+        print("3. Done")
 
-    valid_status = False
-    while not valid_status:
         try:
             status_choice = int(input("Enter new status: "))
 
@@ -464,12 +479,13 @@ def update_records():
                 print("Cannot select the same status.")
             else:
                 selected_pet_data[3] = new_status
-                valid_status = True
+                valid_choice = True
 
         except ValueError:
             print("Invalid input, please try again.\n")
 
-    date = validate_date(new_status)
+    # Pass the data to validate in validate_date() function
+    date = validate_date(selected_pet_data[4])
     selected_pet_data[4] = date
 
     updated_record_string = f"{selected_pet_data[1]},{selected_pet_data[0]},{selected_pet_data[2]},{selected_pet_data[3]},{selected_pet_data[4]}\n"
@@ -514,21 +530,25 @@ def remove_records():
 
             if 1 <= choice <= len(record_list):
                 valid_confirm = False
+
                 while not valid_confirm:
                     confirm = input(f"Are you sure you want to delete record {choice}? (y/n): ")
 
                     if confirm == 'y' or confirm == 'Y':
                         record_list[choice - 1: choice] = []
+
                         with open("../data/care_records.txt", "w") as f:
                             for record in record_list:
                                 f.write(record)
                         print("\nRecord removed successfully!")
                         valid_confirm = True
                         valid_choice = True
+
                     elif confirm == 'n' or confirm == 'N':
                         print("\nDeletion cancelled.")
                         valid_confirm = True
                         valid_choice = True
+
                     else:
                         print("Invalid input, please enter 'y' or 'n'.\n")
             else:
@@ -545,9 +565,11 @@ def remove_records():
         if choice == 'y' or choice == 'Y':
             remove_records()
             valid_choice = True
+
         elif choice == 'n' or choice == 'N':
             show_pet_care_menu()
             valid_choice = True
+
         else:
             print("Invalid input, please try again.")
 
@@ -564,23 +586,22 @@ def generate_summary_report():
     # Initialize counters
     total_records = count_len(record_list)
 
-    # Counters for Care Types
+    # Counters for care types
     feeding_count = 0
     grooming_count = 0
     activities_count = 0
 
-    # Counters for Status
+    # Counters for status
     pending_count = 0
     inprogress_count = 0
     done_count = 0
 
     # Process data through the list
     for record in record_list:
-        # Split the line into data components
-        # Format: PetID, PetName, CareType, Status, Date
-        data = record.strip().split(",")
+        strip_record = custom_strip(record)
+        data = custom_split(strip_record)
 
-        # Count Care Types (Index 2)
+        # Count care types
         if data[2] == "Feeding":
             feeding_count += 1
         elif data[2] == "Grooming":
@@ -588,7 +609,7 @@ def generate_summary_report():
         elif data[2] == "Activities":
             activities_count += 1
 
-        # Count Status (Index 3)
+        # Count status
         if data[3] == "Pending":
             pending_count += 1
         elif data[3] == "In-progress":
@@ -610,10 +631,10 @@ def generate_summary_report():
     print(f"- Done       : {done_count}")
     print("=" * 50)
 
-    # Navigation loop to return to main menu
     valid_choice = False
     while not valid_choice:
         choice = input("\nPress 'Y' to return to the previous menu: ")
+
         if choice == 'y' or choice == 'Y':
             show_daycare_staff_menu()
             valid_choice = True
