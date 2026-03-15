@@ -109,16 +109,30 @@ def custom_split(x, y):
     return result
 
 #define a function to remove newline and carriage return characters
-def custom_strip(y):
-    # initialize an empty string
-    z = ""
-    #loop through every character in the input
-    for char in y:
-        #if the character is not a newline or a carriage return
-        if char != "\n" and char != "\r" and char != " ":
-            #add it to the result
-            z += char
-    return z
+def custom_strip(x):
+    #initialize count at the beginning
+    start = 0
+    #initialize end counter at the last
+    end = custom_len(x) - 1
+
+    # Remove leading spaces/newlines
+    while start <= end and (x[start] == " " or x[start] == "\n"):
+        #move forwards until it points to first non-space/non-newline
+        start += 1
+
+    # Remove trailing spaces/newlines
+    while end >= start and (x[end] == " " or x[end] == "\n"):
+        #mmove backward until it points to the last non-space/non-whiteline
+        end -= 1
+
+    # Initialize an empty string to store the stripped result
+    result = ""
+    #loop from start to end
+    for i in range(start, end + 1):
+        #append each charater in the range to the result string
+        result += x[i]
+
+    return result
 
 #Function to display the available slots
 def grooming_slots():
