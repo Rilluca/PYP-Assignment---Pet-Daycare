@@ -1,4 +1,2 @@
 Haji,PT001,Coco,1234
 Rillu,PT002,Cookie,123
-1001,ALERT, 2
-PT001,ALERT, Special care
