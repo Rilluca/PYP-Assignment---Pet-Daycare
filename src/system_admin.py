@@ -3,7 +3,29 @@
 # - View all data (owners, pets, bookings, payments).
 # - Generate overall service report (total bookings, revenue, available slots).
 from src.booking_officer import automatic_pet_id
-def check_alphabet(x):
+def manual_lens(x):
+    count=0
+    for object in x:
+        count=count+1
+    return count
+def manual_strip(x):
+        start = 0
+        end = manual_lens(x) - 1
+        #start become the starting position index
+        while start <= end and (x[start] == " " or x[start] == "\n"):
+            start += 1
+        #end become the ending position index
+        while end >= start and (x[end] == " " or x[end] == "\n"):
+            end -= 1
+        #delcare result
+        result = ""
+        i = start
+        while i <= end:
+            result += x[i] #add to result word by word back
+            i += 1
+        return result
+
+def check_alphabet_and_empty_string_or_purely_spaces(x):
     is_alphabet = True
     count = 0
     s_count = 0
@@ -16,6 +38,39 @@ def check_alphabet(x):
     if s_count==count or count==0:
             is_alphabet = False
     return is_alphabet
+
+def custom_lower(x):
+    total=""
+    for c in x:
+        c=custom_ord(c)
+        if 64>c<91:
+            c=c+32
+        c=custom_chr(c)
+        total=total+c
+    return total
+
+def custom_ord(x):
+#A string of characters in their exact ASCII order
+#The character are starting from 32 as other
+        lookup = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+        # Manually search for the character
+        index = 0
+        for c in lookup:
+            if c ==x:
+                return index + 32 #for a proper ASCII
+            index += 1
+        return -1
+def custom_chr(x):
+    lookup = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+    # Adjust for the starting offset of 32
+    target_index = x - 32
+    # Manually find the character at that index
+    current_index = 0
+    for c in lookup:
+        if current_index == target_index:
+            return c
+        current_index += 1
+    return ""  # Out of range in lookup
 
 def sys_viewdata():
     while True:
@@ -54,6 +109,7 @@ def sys_viewdata():
                                         print("No pet found for this user data\n")
 
                         case 2:
+
                             with open("../data/pet.txt", "r") as file:
                                 pet_list = file.readlines()
                                 for line in pet_list:
@@ -61,7 +117,9 @@ def sys_viewdata():
                                     print("Pet_Id-",pet_data[1],end="\n")
                                     print("Pet-",pet_data[2],end="\n")
                                     print("Pet Owner-",pet_data[0],end="\n\n")
+
                         case 3:
+
                             with open("../data/booking.txt", "r") as file:
                                 booking_list = file.readlines()
                                 for line in booking_list:
@@ -69,7 +127,9 @@ def sys_viewdata():
                                     print("Booking ID-",booking_data[0],end="\n")
                                     print("Username-",booking_data[1],end="\n")
                                     print("Date-",booking_data[2],end="\n\n")
+
                         case 4:
+
                             with open("../data/service_history.txt", "r") as file:
                                 payment_list = file.readlines()
                                 for line in payment_list:
@@ -88,7 +148,6 @@ def sys_viewdata():
             print("Invalid choice. Please try again.")
         except Exception:
             print("Unknown error occured. Please try again.")
-
 
 def sys_manage():
     while True:
@@ -109,6 +168,7 @@ def sys_manage():
                 case 2:
                     sys_service_option2()
                 case 3:
+                    print("Exiting program")
                     break
                 case _:
                     print("Enter a valid option")
@@ -137,7 +197,7 @@ def sys_service_option1():
                         no_found=True
                         while True:
                             service= input("Enter service name:")
-                            check_alpha = check_alphabet(service)
+                            check_alpha = check_alphabet_and_empty_string_or_purely_spaces(service)
                             if check_alpha == True:
                                 break
                             else:
@@ -173,11 +233,12 @@ def sys_service_option1():
                         if service_data[0] == service:
                             found = True
                             print("Current data:", service_data)
-                            field = input("Which field to update? (service name/price): ").lower()
+                            field = input("Which field to update? (service name/price): ")
+                            field = custom_lower(field)
                             if field == "service name":
                                 while True:
                                     service = input("Enter service name:")
-                                    check_alpha = check_alphabet(service)
+                                    check_alpha = check_alphabet_and_empty_string_or_purely_spaces(service)
                                     if check_alpha == True:
                                         break
                                     else:
@@ -250,14 +311,14 @@ def sys_service_option2():
                 case 1:
                     while True:
                             username=input("Enter username:")
-                            check_alpha=check_alphabet(username)
+                            check_alpha=check_alphabet_and_empty_string_or_purely_spaces(username)
                             if check_alpha==True:
                                 break
                             else:
                                 print("Enter a valid name(only alphabet)")
                     while True:
                             pet=input("Enter pet name: ")
-                            check_alpha=check_alphabet(pet)
+                            check_alpha=check_alphabet_and_empty_string_or_purely_spaces(pet)
                             if check_alpha==True:
                                 break
                             else:
@@ -277,11 +338,12 @@ def sys_service_option2():
                         if pet_data[1] == PetID:
                             found = True
                             print("Current data:", pet_data)
-                            field = input("What would u like to update? pet(or)petowner/username): ").lower()
+                            field = input("What would u like to update? pet(or)petowner/username: ")
+                            field = custom_lower(field)
                             if field == "pet":
                                 while True:
                                     pet =(input("Enter pet's new name: "))
-                                    isalpha=check_alphabet(pet)
+                                    isalpha=check_alphabet_and_empty_string_or_purely_spaces(pet)
                                     if isalpha==True:
                                         break
                                     else:
@@ -291,7 +353,7 @@ def sys_service_option2():
                             elif field == "username" or field== "petowner":
                                 while True:
                                     username = input("Enter username:")
-                                    check_alpha = check_alphabet(username)
+                                    check_alpha = check_alphabet_and_empty_string_or_purely_spaces(username)
                                     if check_alpha == True:
                                         break
                                     else:
@@ -333,7 +395,6 @@ def sys_service_option2():
             print("Invalid choice. Please try again.")
         except Exception:
             print("Unknown error occured. Please try again.")
-
 
 def sys_summary():
     with open("../data/pet.txt", "r") as file:
@@ -388,12 +449,10 @@ def sys_summary():
     Available slot: {available_slot} 
     """)
 
-
-
 def show_sys_admin_menu():
     while True:
         print("""
-    ===========================
+    ==========  =================
     System admin menu
     ===========================
     What would you like to do?
