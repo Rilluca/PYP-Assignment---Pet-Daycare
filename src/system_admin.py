@@ -8,6 +8,23 @@ def manual_lens(x):
     for object in x:
         count=count+1
     return count
+
+def append_to_end(ori_list, item_to_append):
+    ori_list[manual_lens(ori_list):manual_lens(ori_list)]=[item_to_append]
+    return ori_list #credit to miss lecturer Chong Mien May
+
+def manual_spilt(x,separator):
+        result = []
+        current = ""
+        for c in x:
+            if c == separator:
+                append_to_end(result, current)
+                current = ""
+            else:
+                current += c
+        append_to_end(result, current)
+        return result
+
 def manual_strip(x):
         start = 0
         end = manual_lens(x) - 1
@@ -94,14 +111,16 @@ def sys_viewdata():
                             with open("../data/users.txt", "r") as file:
                                 credential_list = file.readlines()
                                 for line in credential_list:
-                                    credentials = line.strip().split(",")
+                                    credentials = manual_strip(line)
+                                    credentials = manual_spilt(line,",")
                                     print("User/pet owner-",credentials[0],end="\n")
-                                    print("User\'s password-",credentials[1],end="\n")
+                                    print("User\'s password-",credentials[1],end="\n\n")
                                     with open("../data/pet.txt", "r") as file:
                                         pet_list=file.readlines()
                                         not_found = True
                                         for line in pet_list:
-                                            pet_data=line.strip().split(",")
+                                            pet_data= manual_strip(line)
+                                            pet_data= manual_spilt(line, ",")
                                             if pet_data[0]==credentials[0]:
                                                 print("Pet-",pet_data[2], "(",pet_data[1],")",end="\n\n")
                                                 not_found=False
@@ -113,7 +132,8 @@ def sys_viewdata():
                             with open("../data/pet.txt", "r") as file:
                                 pet_list = file.readlines()
                                 for line in pet_list:
-                                    pet_data = line.strip().split(",")
+                                    pet_data = manual_strip(line)
+                                    pet_data = manual_spilt(line, ",")
                                     print("Pet_Id-",pet_data[1],end="\n")
                                     print("Pet-",pet_data[2],end="\n")
                                     print("Pet Owner-",pet_data[0],end="\n\n")
@@ -123,7 +143,8 @@ def sys_viewdata():
                             with open("../data/booking.txt", "r") as file:
                                 booking_list = file.readlines()
                                 for line in booking_list:
-                                    booking_data = line.strip().split(",")
+                                    booking_data = manual_strip(line)
+                                    booking_data = manual_spilt(line, ",")
                                     print("Booking ID-",booking_data[0],end="\n")
                                     print("Username-",booking_data[1],end="\n")
                                     print("Date-",booking_data[2],end="\n\n")
@@ -133,7 +154,8 @@ def sys_viewdata():
                             with open("../data/service_history.txt", "r") as file:
                                 payment_list = file.readlines()
                                 for line in payment_list:
-                                    payment_data = line.strip().split(",")
+                                    payment_data = manual_strip(line)
+                                    payment_data_data = manual_spilt(line, ",")
                                     print("Username-",payment_data[1],end="\n")
                                     print("Date-",payment_data[2],end="\n")
                                     print("Status-",payment_data[5],end="\n")
@@ -205,7 +227,8 @@ def sys_service_option1():
                         with open("../data/Service.txt", "r") as file:
                             service_list=file.readlines()
                             for line in service_list:
-                                service_data = line.strip().split(",")
+                                service_data = manual_strip(line)
+                                service_data = manual_spilt(line, ",")
                                 if service==service_data[0]:
                                     print("Service already exists")
                                     no_found= False
@@ -229,7 +252,8 @@ def sys_service_option1():
                     found = False
                     index = 0  # manual counter
                     for line in service_list:
-                        service_data = line.strip().split(",")
+                        service_data = manual_strip(line)
+                        service_data = manual_spilt(line, ",")
                         if service_data[0] == service:
                             found = True
                             print("Current data:", service_data)
@@ -272,7 +296,8 @@ def sys_service_option1():
                     found = False
                     index = 0
                     for line in service_list:
-                        service_data = line.strip().split(",")
+                        service_data = manual_strip(line)
+                        service_data = manual_spilt(line, ",")
                         if service_data[0] == service:
                             del service_list[index]
                             found = True
@@ -334,7 +359,8 @@ def sys_service_option2():
                     found = False
                     index = 0  # manual counter
                     for line in pet_list:
-                        pet_data = line.strip().split(",")
+                        pet_data = manual_strip(line)
+                        pet_data = manual_spilt(line, ",")
                         if pet_data[1] == PetID:
                             found = True
                             print("Current data:", pet_data)
@@ -375,7 +401,8 @@ def sys_service_option2():
                     found = False
                     index = 0
                     for line in pet_list:
-                        pet_data = line.strip().split(",")
+                        pet_data = manual_strip(line)
+                        pet_data = manual_spilt(line, ",")
                         if pet_data[1] == PetID:
                             del pet_list[index]
                             found = True
@@ -427,7 +454,8 @@ def sys_summary():
     with open("../data/service_history.txt", "r") as file:
         total=0
         for line in file:
-            data=line.strip().split(",")
+            data = manual_strip(line)
+            data = manual_spilt(line, ",")
             price=data[4]
             price=float(price)
             total=total+price
