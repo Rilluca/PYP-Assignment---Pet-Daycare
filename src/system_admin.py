@@ -5,12 +5,11 @@
 from src.booking_officer import automatic_pet_id
 
 def manual_lens(x):
-    count=0
-
+    count = 0          # initialize counter
+    # iterate through each element in the collection
     for object in x:
-        count=count+1
-
-    return count
+        count = count + 1   # increase counter for every element found
+    return count       # return total number of elements
 
 def append_to_end(ori_list, item_to_append):
 
