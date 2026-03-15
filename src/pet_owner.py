@@ -3,7 +3,81 @@
 # - Request bookings or extensions.
 # - View pet service history and invoices.
 
-#Custon function instead of len()
+#define a function to variable if a string contains only letters and spaces, and is not empty
+def check_alphabet_and_empty_string_or_purely_spaces(x):
+    #initialize as true
+    is_alphabet = True
+    #initialize a counter for total characters
+    count = 0
+    #initialize a counter for space characters
+    s_count = 0
+    #Loop through every character in the input string
+    for c in x:
+        # Check if the character is not a lowercase letter, uppercase letter, or a space
+        if not ((c >= "a" and c <= "z" ) or (c >= "A" and c <= "Z") or c==" "):
+            #set flag to false
+            is_alphabet = False
+        #check if a character is a space
+        if c==" ":
+            #increament the space by 1
+            s_count=s_count+1
+        #increament the total character by 1
+        count=count+1
+    # If the string is entirely spaces or has a length of zero
+    if s_count==count or count==0:
+            #set flag to false
+            is_alphabet = False
+    #return the result
+    return is_alphabet
+
+#define a function to convert an integer to a character based on a custom function
+def custom_chr(x):
+    #representing ASCII from idnex 332 to 126
+    lookup = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+
+    #if the input num is within the valid range
+    if 32 <= x <= 126:
+        #return the character
+        return lookup[x- 32]
+    #return an empty string if out of range
+    return ""
+
+#define  a function to find the ASCII index of a character
+def custom_ord(x):
+    #the same as in custom_chr
+    lookup = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+    #set index at 0
+    index = 0
+    #loop through every character in the lookup string
+    for c in lookup:
+        #if the character matches the input
+        if c == x:
+            #return the index plus the offset of 32
+            return index + 32
+        #move to the next index
+        index += 1
+    #return -1 if the character is not found
+    return -1
+
+#define a functon to convert a string to lowercase
+def custom_lower(x):
+    #initialize the empty string
+    total = ""
+    #loop through each character in the input string
+    for c in x:
+        #numeric value
+        c = custom_ord(c)
+        #checks if A-Z
+        if 64 < c < 91:
+            #add 32 to shift it o lowercase range
+            c = c + 32
+        #convert the numeric value back to a character
+        c = custom_chr(c)
+        #append the character to the result string
+        total = total + c
+    return total
+
+#define a function to count the length of an item
 def count_len(item):
     #set the initial counter to 0
     count = 0
@@ -12,6 +86,53 @@ def count_len(item):
         #increases the counter by 1
         count += 1
     return count
+
+#define a function to split the string into a list
+def custom_split(x, y):
+    #initialize an empty string
+    result = []
+    #initialize an empty string to build words
+    current_word = ""
+    #loop through every character
+    for char in x:
+        #if the character matches the delimiter (like a comma)
+        if char == y:
+            #add the built word
+            result = result + [current_word]
+            #reset
+            current_word = ""
+        else:
+            #add the character to the current word builder
+            current_word += char
+    #add the last word remaining
+    result = result + [current_word]
+    return result
+
+#define a function to remove newline and carriage return characters
+def custom_strip(x):
+    #initialize count at the beginning
+    start = 0
+    #initialize end counter at the last
+    end = custom_len(x) - 1
+
+    # Remove leading spaces/newlines
+    while start <= end and (x[start] == " " or x[start] == "\n"):
+        #move forwards until it points to first non-space/non-newline
+        start += 1
+
+    # Remove trailing spaces/newlines
+    while end >= start and (x[end] == " " or x[end] == "\n"):
+        #mmove backward until it points to the last non-space/non-whiteline
+        end -= 1
+
+    # Initialize an empty string to store the stripped result
+    result = ""
+    #loop from start to end
+    for i in range(start, end + 1):
+        #append each charater in the range to the result string
+        result += x[i]
+
+    return result
 
 #Function to display the available slots
 def grooming_slots():
@@ -32,8 +153,10 @@ def grooming_slots():
         #with statement automatically closes the file unlike file
             #looping through the file one by one
             for line in f:
-                #remove newline character and split it by commas
-                parts = line.strip().split(",")
+                #remove hidden newline characters
+                clean_line = custom_strip(line)
+                #split the line by commas
+                parts = custom_split(clean_line, ",")
                 #check if the line fits the length and same date
                 if count_len(parts) >=4 and parts[3] == date:
                     #increase booked_slots by 1
@@ -66,7 +189,7 @@ def existing_books(booking_id):
             #loop through every line in the file
             for line in f:
                 #remove new line and split the line by comma
-                parts = line.strip().split(",")
+                parts = custom_split(custom_strip(line), ",")
                 if parts[0] == booking_id:
                     #check if booking id matches index 0
                     return True
@@ -136,8 +259,10 @@ def choose_service():
         with open('../data/Service.txt', 'r') as f:
             #loop through each line
             for line in f:
-                #split lines by comma
-                parts = line.strip().split(",")
+                #clean the line
+                clean_line = custom_strip(line)
+                #split name and price
+                parts = custom_split(clean_line, ",")
                 #check if valid records
                 if count_len(parts) >= 2:
                     #add to service list
@@ -182,6 +307,14 @@ def choose_service():
 def request_Booking():
     #asks user for the following information
     name = input("Please enter your name:")
+
+    #validate booking name by calling the function
+    if not check_alphabet_and_empty_string_or_purely_spaces(name):
+        print("Invalid name")
+        #if not valid, return
+        return
+
+    #ask user to input their information
     pet_id = input("Please enter your pet_id:")
     date = input("Enter date to book (DD-MM-YYYY): ")
 
@@ -207,14 +340,16 @@ def request_Booking():
     service_name, service_fee = service[0], service[1]
 
     #asks the user to input whether they want to pay or no
-    payment = input(f"Do you agree to pay Rm {service_fee}? (Accept/Decline): ").capitalize()
+    payment = input(f"Do you agree to pay Rm {service_fee}? (accept/decline): ")
+    #normalize payment input to lower case
+    payment = custom_lower(payment)
 
     #if accepts
-    if payment == "Accept":
+    if payment == "accept":
         #display this
         print("Payment made")
     #if does not accept
-    elif payment == "Decline":
+    elif payment == "decline":
         #display this and end
         print ("Payment declined")
         return
@@ -228,9 +363,9 @@ def request_Booking():
             #loop through each booking
             for line in f:
                 #split line data and seperate by comma
-                parts = line.strip().split(",")
+                parts = custom_split(custom_strip(line), ",")
                 #check if same pet is already booked on th same date
-                if count_len(parts) >=4 and parts[2] == date and parts[3] == pet_id:
+                if count_len(parts) >=4 and parts[3] == date and parts[2] == pet_id:
                     #if so, display this
                     print(f"Booking already exists for {pet_id} on {date}")
                     return
@@ -363,8 +498,8 @@ def cancel_booking():
             line = f.readline()
             #looping while the line is not empty
             while line != "":
-                #spit the line adn seperate by comma
-                parts = line.strip().split(",")
+                #spit the line and seperate by comma
+                parts = custom_split(custom_strip(line), ",")
                 #keeps lines that are not cancelled booking
                 if parts[0] != booking_id:
                     new_text += line
@@ -412,11 +547,11 @@ def reschedule_booking():
                 #looping through each booking
                 for line in f:
                     #split booking data and seperate by comma
-                    parts = line.strip().split(",")
-                    #check if the booking id matches the exisitng booking id
+                    parts = custom_split(custom_strip(line), ",")
+                    #check if the booking id matches the existing booking id
                     if parts[0] == booking_id:
                         #update the booking date
-                        parts[2] = new_date
+                        parts[3] = new_date
                         #if all these, mark succes
                         success = True
                     #rebuild booking records
@@ -442,7 +577,12 @@ def reschedule_booking():
 #function to view user service history
 def view_service_history():
         #asks the user to input their name
-        name = input("Please enter your name: ").strip().lower()
+        name = input("Please enter your name: ")
+        if not check_alphabet_and_empty_string_or_purely_spaces(name):
+            print("Invalid name")
+            return
+        name = custom_lower(name)
+
         #flag to check if the record exists
         Result = False
 
@@ -454,13 +594,27 @@ def view_service_history():
                 #loop through the file records
                 for line in f:
                     #split record data and seperate by comma
-                    parts = line.strip().split(",")
+                    clean_line = custom_strip(line)
+                    parts = custom_split(clean_line, ",")
                     #check if the name matches
-                    if count_len(parts) >= 4 and parts[1].strip().lower() == name:
+                    if count_len(parts) >= 5:
+                        #get owner name from file in lowercase
+                        owner_name = custom_lower(parts[1])
+                        #if name matches
+                        if owner_name == name:
+                            # Assing local variables to the matched index for readability
+                            pet_id = parts[0]
+                            owner = parts[1]
+                            date = parts[2]
+                            service = parts[3]
+                            fee = parts[4]
+                            payment = parts[5]
+                            status = parts[6] if count_len(parts) > 6 else 'Booked'
+
+
                         #display service history
-                        status = parts[5] if count_len(parts) > 5 else 'Booked'
-                        print(f"Pet ID: {parts[0]} | Owner Name: {parts[1]} | Service Date: {parts[2]} |"
-                              f"Service Name: {parts[3]} | Service Fee: RM {parts[4]} | Payment Status : {parts[5]} | Status: {status} ")
+                            print(f"Pet ID: {pet_id} | Owner Name: {owner} | Service Date: {date} |"
+                                 f"Service Name: {service} | Service Fee: RM {fee} | Payment Status : {payment} | Status: {status} ")
                         #record found flagged
                         Result = True
                 #if no records are found
@@ -474,17 +628,17 @@ def view_service_history():
 
 
 #funcion to ask users whether to contineu or back to the menu
-def continue_or_menu():
+def continue_or_exit():
     #infinite loop until valid input
     while True:
         #asks user to entera  choice
-        choice = input("Do you want to continue (y/n)?").lower()
+        choice = custom_lower(input("Do you want to continue (y/n)?"))
         #if user wants to continue, enter this
         if choice == "y":
             return True
-        #if user wants to go back to the menu, enter this
+        #if user wants to go exit, enter this
         elif choice == "n":
-            pet_owner_menu()
+            print("Goodbye!")
             return False
         else:
             #if user enters anything else, display this
@@ -531,7 +685,7 @@ def pet_owner_menu():
             break
 
         #asks user whether to continue or not
-        menu = continue_or_menu()
+        menu = continue_or_exit()
 
 
 
