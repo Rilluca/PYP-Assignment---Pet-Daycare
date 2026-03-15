@@ -5,8 +5,15 @@
 from src.booking_officer import automatic_pet_id
 def check_alphabet(x):
     is_alphabet = True
+    count = 0
+    s_count = 0
     for c in x:
-        if not ((c >= "a" and c <= "z" ) or (c >= "A" and c <= "Z")):
+        if not ((c >= "a" and c <= "z" ) or (c >= "A" and c <= "Z") or c==" "):
+            is_alphabet = False
+        if c==" ":
+            s_count=s_count+1
+        count=count+1
+    if s_count==count or count==0:
             is_alphabet = False
     return is_alphabet
 
@@ -63,12 +70,14 @@ def sys_viewdata():
                                     print("Username-",booking_data[1],end="\n")
                                     print("Date-",booking_data[2],end="\n\n")
                         case 4:
-                            with open("../data/booking.txt", "r") as file:
+                            with open("../data/service_history.txt", "r") as file:
                                 payment_list = file.readlines()
                                 for line in payment_list:
                                     payment_data = line.strip().split(",")
                                     print("Username-",payment_data[1],end="\n")
-                                    print("Date-",payment_data[2],end="\n\n")
+                                    print("Date-",payment_data[2],end="\n")
+                                    print("Status-",payment_data[5],end="\n")
+                                    print("Payment- RM", payment_data[4],end="\n\n")
 
                         case 5:
                             print("Exiting program")
@@ -126,7 +135,13 @@ def sys_service_option1():
                 case 1:
                     while True:
                         no_found=True
-                        service=input("Enter service name: ")
+                        while True:
+                            service= input("Enter service name:")
+                            check_alpha = check_alphabet(service)
+                            if check_alpha == True:
+                                break
+                            else:
+                                print("Enter a valid service(only alphabet)")
                         with open("../data/Service.txt", "r") as file:
                             service_list=file.readlines()
                             for line in service_list:
@@ -139,7 +154,7 @@ def sys_service_option1():
                             break
                     while True:
                         try:
-                            payment=int(input("Enter payment number: "))
+                            payment=int(input("Enter price of the service: "))
                         except ValueError:
                             print("Enter valid price")
                         else:
@@ -160,13 +175,20 @@ def sys_service_option1():
                             print("Current data:", service_data)
                             field = input("Which field to update? (service name/price): ").lower()
                             if field == "service name":
-                                service_data[0] = input("Enter Service option ")
+                                while True:
+                                    service = input("Enter service name:")
+                                    check_alpha = check_alphabet(service)
+                                    if check_alpha == True:
+                                        break
+                                    else:
+                                        print("Enter a valid service(only alphabet)")
+                                service_data[0] = service
                                 print("Service Name updated successfully.")
                             elif field == "price":
                                 while True:
                                     try:
                                         payment = int(input("Enter price: "))
-                                        payment = str(payment)
+                                        payment =str(payment)
                                     except ValueError:
                                         print("Enter valid price")
                                     else:
@@ -226,7 +248,13 @@ def sys_service_option2():
             option = int(input("Your choice: "))
             match option:
                 case 1:
-                    username=input("Enter name")
+                    while True:
+                            username=input("Enter username:")
+                            check_alpha=check_alphabet(username)
+                            if check_alpha==True:
+                                break
+                            else:
+                                print("Enter a valid name(only alphabet)")
                     while True:
                             pet=input("Enter pet name: ")
                             check_alpha=check_alphabet(pet)
@@ -252,7 +280,7 @@ def sys_service_option2():
                             field = input("What would u like to update? pet(or)petowner/username): ").lower()
                             if field == "pet":
                                 while True:
-                                    pet =(input("Enter pet: "))
+                                    pet =(input("Enter pet's new name: "))
                                     isalpha=check_alphabet(pet)
                                     if isalpha==True:
                                         break
@@ -261,7 +289,13 @@ def sys_service_option2():
                                 pet_data[2] = pet
                                 print("pet name updated successfully.")
                             elif field == "username" or field== "petowner":
-                                username=input("Enter username: ")
+                                while True:
+                                    username = input("Enter username:")
+                                    check_alpha = check_alphabet(username)
+                                    if check_alpha == True:
+                                        break
+                                    else:
+                                        print("Enter a valid name(only alphabet)")
                                 pet_data[0] = username
                             else:
                                 print("Invalid input.")
@@ -328,12 +362,14 @@ def sys_summary():
                 available_slot="full"
             else:
                 available_slot="Error"
-    with open("../data/booking.txt", "r") as file:
+        used_slot=count
+    with open("../data/service_history.txt", "r") as file:
         total=0
         for line in file:
-            data=line.strip.split(",")
-            price=int(data[0])
-            total=total+data
+            data=line.strip().split(",")
+            price=data[4]
+            price=float(price)
+            total=total+price
     print(f"""
     ============================
     Service System Report
@@ -373,10 +409,8 @@ def show_sys_admin_menu():
                     sys_viewdata()
                 case 2:
                     sys_manage()
-                    break
                 case 3:
                     sys_summary()
-                    break
                 case 4:
                     break
                 case _:
