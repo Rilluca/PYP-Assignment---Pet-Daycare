@@ -1,5 +1,3 @@
-BK0002,Crush,123,22-02-2008,
-BK0003,Crush,123,23-02-2009,HairCut,2000Googoogaagaa
 BK0004,Crush,123,22-02-2008,HairCut,2000Googoogaagaa
 BK0005,Crush,123,22-02-2008,HairCut,2000Googoogaagaa
 BK0006,Crush,123,20-02-2008,Pet Taxi,250
@@ -11,3 +9,5 @@ BK0010,Crush,123,23-02-2008,Pet Taxi,250,paid
 BK0011,Crush,123,25-02-2008,Pet Taxi,250,PAID
 BK0012,Crush,123,22-02-2007,HairCut,40,Paid
 BK0013,Crush,123,22-02-2008,HairCut,40,Not paid
+BK0014,Crush,123,22-02-2008,HairCut,40,Accept
+BK0014,Crush,123,02-02-2008,HairCut,40,accept
