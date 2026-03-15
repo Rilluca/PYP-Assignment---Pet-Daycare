@@ -115,7 +115,7 @@ def custom_strip(y):
     #loop through every character in the input
     for char in y:
         #if the character is not a newline or a carriage return
-        if char != "\n" and char != "\r":
+        if char != "\n" and char != "\r" and char != " ":
             #add it to the result
             z += char
     return z
