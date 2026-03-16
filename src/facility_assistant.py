@@ -12,7 +12,10 @@ def add_facility():
             file.write(f"{area},{status},{datetime.datetime.now()}\n")
 
         print("Facility status saved")
-        break
+
+        again = input("Add another facility? (yes / no): ")
+        if again.lower() != "yes":
+            break
 
 
 # -------- 2. Add special / medical alert --------
@@ -55,8 +58,7 @@ def check_overdue():
             # id,name,type,date,service,price,note
 
             if len(data) < 7:
-                print("Wrong format line:", booking)
-                continue
+                continue                          # FIX: silently skip invalid lines
 
             booking_id = data[0]
             pet_name = data[1]
@@ -74,19 +76,18 @@ def check_overdue():
                 continue
 
             if pickup_date < today:
-
                 print("Overdue pickup!")
                 print("Booking:", booking_id)
                 print("Pet:", pet_name)
                 print("Date:", date_str)
 
-                if service != "":
-                    print("Service:", service)
+            if service != "":                     # FIX: moved outside overdue block
+                print("Service:", service)
 
-                if note != "":
-                    print("Note:", note)
+            if note != "":                        # FIX: moved outside overdue block
+                print("Note:", note)
 
-                print("--------------------")
+            print("--------------------")
 
     except FileNotFoundError:
         print("booking.txt file not found")

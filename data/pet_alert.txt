@@ -4,3 +4,4 @@ PT001,ALERT,Need special care
 1234,ALERT,medical
 PT001,ALERT,Medical
 PT002,ALERT,Caring needed
+123,ALERT,medical
