@@ -2,25 +2,31 @@ import datetime
 # -------- 1. Prepare daycare / grooming --------
 def add_facility():
 
-    area = input("Enter area (Play Area / Grooming Station): ")
-    status = input("Enter status (Ready / Cleaning Required): ")
+    while True:                                                  # LOOP before write
+        area = input("Enter area (Play Area / Grooming Station): ")
+        status = input("Enter status (Ready / Cleaning Required): ")
 
-    file = open("../data/maintenance.txt", "a")
-    file.write(f"{area},{status},{datetime.datetime.now()}\n")
-    file.close()
+        with open("../data/maintenance.txt", "a") as file:      # write-only ("a")
+            file.write(f"{area},{status},{datetime.datetime.now()}\n")
 
-    print("Facility status saved")
+        print("Facility status saved")
+        break
+
 # -------- 2. Add special / medical alert --------
 def add_alert():
 
-    pet_id = input("Enter Pet ID: ")
-    alert = input("Enter medical / special alert: ")
+    while True:                                                  # LOOP before write
+        pet_id = input("Enter Pet ID: ")
+        alert = input("Enter medical / special alert: ")
 
-    file = open("../data/pet_alert.txt", "a")
-    file.write(f"{pet_id},ALERT,{alert}\n")
-    file.close()
+        with open("../data/pet_alert.txt", "a") as file:        # write-only ("a")
+            file.write(f"{pet_id},ALERT,{alert}\n")
 
-    print("Alert added")
+        print("Alert added")
+
+        again = input("Add another alert? (yes / no): ")
+        if again.lower() != "yes":
+            break
 
 
 # -------- 3. Check overdue bookings --------
@@ -29,8 +35,8 @@ def check_overdue():
     today = datetime.date.today()
 
     try:
-        file = open("../data/booking.txt", "r")
-        bookings = file.readlines()
+        with open("../data/booking.txt", "r") as file:          # read-only ("r")
+            bookings = file.readlines()
 
         if len(bookings) == 0:
             print("No bookings found")
@@ -38,20 +44,18 @@ def check_overdue():
 
         print("\nChecking bookings...\n")
 
-        for booking in bookings:
+        for booking in bookings:                                 # LOOP before read
 
             data = booking.strip().split(",")
 
-            # your file has many columns
             if len(data) < 7:
                 continue
 
             booking_id = data[0]
-            pet_name = data[1]
-
-            date_str = data[3]      # correct date index
-            service = data[4]       # haircut / daycare etc
-            note = data[6]          # last column
+            pet_name   = data[1]
+            date_str   = data[3]
+            service    = data[4]
+            note       = data[6]
 
             try:
                 pickup_date = datetime.datetime.strptime(
@@ -62,24 +66,19 @@ def check_overdue():
                 print("Wrong date format:", date_str)
                 continue
 
-            # overdue check
             if pickup_date < today:
                 print("Overdue pickup!")
                 print("Booking:", booking_id)
-                print("Pet:", pet_name)
-                print("Date:", date_str)
+                print("Pet:",     pet_name)
+                print("Date:",    date_str)
 
-            # special / service
             if service != "":
                 print("Service:", service)
 
-            # note
             if note != "":
                 print("Note:", note)
 
             print("--------------------")
-
-        file.close()
 
     except FileNotFoundError:
         print("booking.txt file not found")
@@ -99,21 +98,12 @@ def main_menu():
 
         if choice == "1":
             add_facility()
-
         elif choice == "2":
             add_alert()
-
         elif choice == "3":
             check_overdue()
-
         elif choice == "4":
             print("Exiting program")
             break
-
         else:
             print("Invalid choice")
-
-
-# -------- RUN --------
-if __name__ == "__main__":
-    main_menu()
