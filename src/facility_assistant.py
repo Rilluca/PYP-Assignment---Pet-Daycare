@@ -1,25 +1,31 @@
 import datetime
+
+
 # -------- 1. Prepare daycare / grooming --------
 def add_facility():
 
-    while True:                                                  # LOOP before write
+    while True:
         area = input("Enter area (Play Area / Grooming Station): ")
         status = input("Enter status (Ready / Cleaning Required): ")
 
-        with open("../data/maintenance.txt", "a") as file:      # write-only ("a")
+        with open("../data/maintenance.txt", "a") as file:
             file.write(f"{area},{status},{datetime.datetime.now()}\n")
 
         print("Facility status saved")
-        break
+
+        again = input("Add another facility? (yes / no): ")
+        if again.lower() != "yes":
+            break
+
 
 # -------- 2. Add special / medical alert --------
 def add_alert():
 
-    while True:                                                  # LOOP before write
+    while True:
         pet_id = input("Enter Pet ID: ")
         alert = input("Enter medical / special alert: ")
 
-        with open("../data/pet_alert.txt", "a") as file:        # write-only ("a")
+        with open("../data/pet_alert.txt", "a") as file:
             file.write(f"{pet_id},ALERT,{alert}\n")
 
         print("Alert added")
@@ -35,7 +41,7 @@ def check_overdue():
     today = datetime.date.today()
 
     try:
-        with open("../data/booking.txt", "r") as file:          # read-only ("r")
+        with open("../data/booking.txt", "r") as file:
             bookings = file.readlines()
 
         if len(bookings) == 0:
@@ -44,18 +50,21 @@ def check_overdue():
 
         print("\nChecking bookings...\n")
 
-        for booking in bookings:                                 # LOOP before read
+        for booking in bookings:
 
             data = booking.strip().split(",")
 
+            # Expected format:
+            # id,name,type,date,service,price,note
+
             if len(data) < 7:
-                continue
+                continue                          # FIX: silently skip invalid lines
 
             booking_id = data[0]
-            pet_name   = data[1]
-            date_str   = data[3]
-            service    = data[4]
-            note       = data[6]
+            pet_name = data[1]
+            date_str = data[3]
+            service = data[4]
+            note = data[6]
 
             try:
                 pickup_date = datetime.datetime.strptime(
@@ -69,13 +78,13 @@ def check_overdue():
             if pickup_date < today:
                 print("Overdue pickup!")
                 print("Booking:", booking_id)
-                print("Pet:",     pet_name)
-                print("Date:",    date_str)
+                print("Pet:", pet_name)
+                print("Date:", date_str)
 
-            if service != "":
+            if service != "":                     # FIX: moved outside overdue block
                 print("Service:", service)
 
-            if note != "":
+            if note != "":                        # FIX: moved outside overdue block
                 print("Note:", note)
 
             print("--------------------")
@@ -98,12 +107,21 @@ def main_menu():
 
         if choice == "1":
             add_facility()
+
         elif choice == "2":
             add_alert()
+
         elif choice == "3":
             check_overdue()
+
         elif choice == "4":
             print("Exiting program")
             break
+
         else:
             print("Invalid choice")
+
+
+# -------- START PROGRAM --------
+if __name__ == "__main__":
+    main_menu()
