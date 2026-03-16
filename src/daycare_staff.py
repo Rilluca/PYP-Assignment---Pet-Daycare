@@ -272,7 +272,7 @@ def select_pet():
                 print("Number out of range, please try again.")
 
         except ValueError:
-            print("Invalid input, please try again.\n")
+            print("Invalid input, please try again.")
 
 # Function to add care records
 # Source: Bro Code, 2024, Write files using Python!, YouTube
@@ -451,10 +451,10 @@ def update_records():
                 selected_pet_data = custom_split(strip_selected_pet)
                 valid_choice = True
             else:
-                print("Number out of range, please try again.\n")
+                print("Number out of range, please try again.")
 
         except ValueError:
-            print("Invalid input, please try again.\n")
+            print("Invalid input, please try again.")
 
     valid_choice = False
     while not valid_choice:
@@ -475,7 +475,7 @@ def update_records():
                 case 3:
                     new_status = "Done"
                 case _:
-                    print("Invalid input, please try again.\n")
+                    print("Invalid input, please try again.")
                     continue
 
             if new_status == selected_pet_data[3]:
@@ -485,10 +485,10 @@ def update_records():
                 valid_choice = True
 
         except ValueError:
-            print("Invalid input, please try again.\n")
+            print("Invalid input, please try again.")
 
     # Pass the data to validate in validate_date() function
-    date = validate_date(selected_pet_data[4])
+    date = validate_date()
     selected_pet_data[4] = date
 
     updated_record_string = f"{selected_pet_data[1]},{selected_pet_data[0]},{selected_pet_data[2]},{selected_pet_data[3]},{selected_pet_data[4]}\n"
@@ -509,7 +509,7 @@ def update_records():
             update_records()
             valid_choice = True
         elif choice == 'n' or choice == 'N':
-            print("Exiting program now.")
+            show_pet_care_menu()
             valid_choice = True
         else:
             print("Invalid input, please try again.")
@@ -554,17 +554,17 @@ def remove_records():
                         valid_choice = True
 
                     else:
-                        print("Invalid input, please enter 'y' or 'n'.\n")
+                        print("Invalid input, please enter 'y' or 'n'.")
             else:
                 print("Number out of range, please try again.")
 
         except ValueError:
-            print("Invalid input, please enter a number.\n")
+            print("Invalid input, please enter a number.")
 
     # Loop to ask user if they want to stay or go back
     valid_choice = False
     while not valid_choice:
-        choice = input("\nWould you like to remove another record? N will go back to previous menu. (y/n): ")
+        choice = input("Would you like to remove another record? N will go back to previous menu. (y/n): ")
 
         if choice == 'y' or choice == 'Y':
             remove_records()
