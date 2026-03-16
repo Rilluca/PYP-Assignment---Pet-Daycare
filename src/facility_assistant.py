@@ -10,6 +10,8 @@ def add_facility():
             file.write(f"{area},{status},{datetime.datetime.now()}\n")
 
         print("Facility status saved")
+        break
+
 # -------- 2. Add special / medical alert --------
 def add_alert():
 
@@ -105,8 +107,3 @@ def main_menu():
             break
         else:
             print("Invalid choice")
-
-
-# -------- RUN --------
-if __name__ == "__main__":
-    main_menu()
