@@ -28,40 +28,57 @@ Welcome to the Manage Bookings Menu, what would you like to do?
 """
 
 def automatic_booking_id():
+    max_num = 0
     try:
         with open('../data/booking.txt', 'r') as f:
-            count = 0
             line = f.readline()
             while line != "":
-                count += 1
+                parts = line.strip().split(",")
+                booking_id = parts [0]
+
+                num = int(booking_id[2:])
+
+                if num > max_num:
+                    max_num = num
+
                 line = f.readline()
+
     except:
-        count = 0
+        max_num = 0
 
-    num = str(count + 1)
-    while len(num) < 4:
-        num = "0" + num
+    new_num = max_num + 1
+    num_str = str(new_num)
 
-    booking_id = "BK" + num
-    return booking_id
+    while len(num_str) < 4:
+        num_str = "0" + num_str
+
+    return "BK" + num_str
 
 def automatic_pet_id():
+    max_num = 0
     try:
         with open('../data/pet.txt', 'r') as f:
-            count = 0
             line = f.readline()
             while line != "":
-                count += 1
+                parts = line.strip().split(",")
+                pet_id = parts[1]
+
+                num = int(parts[2:])
+
+                if num > max_num:
+                    max_num = num
+
                 line = f.readline()
     except:
-        count = 0
+        max_num = 0
 
-    num = str(count + 1)
-    while len(num) < 3:
-        num = "0" + num
+    new_num = max_num + 1
+    num_str = str(new_num)
 
-    pet_id = "PT" + num
-    return pet_id
+    while len(num_str) < 3:
+        num_str = "0" + num_str
+
+    return "PT" + num_str
 
 def register_new_pet_owner():
     while True:
