@@ -670,7 +670,6 @@ def sys_summary():
     # open service_history.txt to calculate total revenue
     with open("../data/service_history.txt", "r") as file:
         total=0  # initialize revenue total
-
         for line in file:
             data = manual_strip(line)  # remove whitespace/newlines
             data = manual_spilt(data, ",")  # split data by comma
