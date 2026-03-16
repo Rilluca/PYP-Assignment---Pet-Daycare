@@ -3,7 +3,7 @@
 # - View all data (owners, pets, bookings, payments).
 # - Generate overall service report (total bookings, revenue, available slots).
 from src.booking_officer import automatic_pet_id
-
+from src.pet_owner import grooming_slots
 def manual_lens(x):
     count = 0          # initialize counter
     # iterate through each element in the collection
@@ -667,25 +667,6 @@ def sys_summary():
             count=count+1  # increment counter for each line
             user_amount=count  # store total users
 
-    # open slots.txt to count used slots and calculate available slots
-    with open("../data/slots.txt", "r") as file:
-        count=0  # reset counter
-
-        for line in file:
-
-            count=count+1  # increment counter for each line
-            used_slot=count  # store used slots
-
-            # determine available slots
-            if used_slot<10:
-                available_slot=10-used_slot  # calculate remaining slots
-            elif used_slot==10:
-                available_slot="full"  # no slots left
-            else:
-                available_slot="Error"  # inconsistency
-
-        used_slot=count  # final used slot count
-
     # open service_history.txt to calculate total revenue
     with open("../data/service_history.txt", "r") as file:
         total=0  # initialize revenue total
@@ -693,8 +674,12 @@ def sys_summary():
         for line in file:
             data = manual_strip(line)  # remove whitespace/newlines
             data = manual_spilt(data, ",")  # split data by comma
-            price=data[4]  # get price from field
-            price=float(price)  # convert to float
+            if data[5]=="accept":
+                price=data[4]
+                price = float(price)# get price from field
+            else:
+                price=0
+                price=float(price)  # convert to float
             total=total+price  # accumulate total revenue
 
     # print system summary report
@@ -708,13 +693,8 @@ def sys_summary():
     Total Bookings: {booking_amount}
 
     Total Revenue: RM {total}
-    -----------
-    Slot info
-    -----------
-    Max slot=10
-    Taken slot={used_slot}
-    Available slot: {available_slot} 
     """)
+    grooming_slots()
 
 def show_sys_admin_menu():
 
