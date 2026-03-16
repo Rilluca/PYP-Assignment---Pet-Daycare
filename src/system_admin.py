@@ -191,7 +191,7 @@ def sys_viewdata():
                             booking_data = manual_spilt(booking_data, ",")
                             print("Booking ID-", booking_data[0], end="\n")
                             print("Username-", booking_data[1], end="\n")
-                            print("Date-", booking_data[2], end="\n\n")
+                            print("Date-", booking_data[3], end="\n\n")
 
                 case 4:
                     # Option 4: View payment/service history
@@ -204,7 +204,7 @@ def sys_viewdata():
                             payment_data = manual_spilt(payment_data, ",")
                             print("Username-", payment_data[1], end="\n")
                             print("Date-", payment_data[2], end="\n")
-                            print("Status-", payment_data[5], end="\n")
+                            print("Status-", payment_data[6], end="\n")
                             print("Payment- RM", payment_data[4], end="\n\n")
 
                 case 5:
@@ -729,7 +729,7 @@ def show_sys_admin_menu():
                     print("Enter a valid option")  # invalid menu option
 
         except ValueError:
-            print("Invalid choice. Please try again.")  # handle non-integer input
-
+            print("Invalid choice. Please try again.")# handle non-integer input
         except Exception:
-            print("Unknown error occured. Please try again.")  # handle unexpected errors
+            print("Unknown error occurred. Please try again.")#handle unexpected errors
+show_sys_admin_menu()
