@@ -205,7 +205,7 @@ def validate_date():
             continue
 
         # Specific logic for month with 30 days
-        if (month in 4, 6, 9, 11) and day > 30:
+        if month in [4, 6, 9, 11] and day > 30:
             print("This month only has 30 days.\n")
             continue
 
@@ -221,7 +221,8 @@ def validate_date():
 
             # If it's not a leap year
             if not is_leap and day > 28:
-                print(f"{year} is not a leap year. February on leap year only has 28 days.")
+                print(f"{year} is not a leap year. February not on leap year only has 28 days.\n")
+                continue
 
         # Return to the input
         return date_input
@@ -362,7 +363,7 @@ def add_care_menu():
         except ValueError:
             print("Invalid input, please try again.\n")
 
-    date = validate_date(status)
+    date = validate_date()
 
     add_care_records(pet_id, pet_name, care_type, status, date)
 
@@ -426,6 +427,7 @@ def view_all_records():
             print("Invalid input, please try again.")
 
 # Function to update pet care status
+# Source: Coding With Sagar, 2024, Contact book app in Python | Python for beginners | #project11, YouTube
 def update_records():
     print('-' * 50)
     print("Update Existing Record")
@@ -513,6 +515,7 @@ def update_records():
             print("Invalid input, please try again.")
 
 # Function to remove an existing care record
+# Source: Coding With Sagar, 2024, Contact book app in Python | Python for beginners | #project11, YouTube
 def remove_records():
     print('-' * 50)
     print("Remove Existing Record")
