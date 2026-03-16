@@ -113,7 +113,7 @@ def custom_strip(x):
     #initialize count at the beginning
     start = 0
     #initialize end counter at the last
-    end = custom_len(x) - 1
+    end = count_len(x) - 1
 
     # Remove leading spaces/newlines
     while start <= end and (x[start] == " " or x[start] == "\n"):

@@ -1,2 +1,2 @@
-Haji,PT001,Coco,1234
-Rillu,PT002,Cookie,123
+Haji,PT001,Coco
+Haji,PT002,Coca

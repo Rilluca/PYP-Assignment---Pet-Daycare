@@ -1,6 +1,4 @@
 import datetime
-
-
 # -------- 1. Prepare daycare / grooming --------
 def add_facility():
 
@@ -12,8 +10,6 @@ def add_facility():
     file.close()
 
     print("Facility status saved")
-
-
 # -------- 2. Add special / medical alert --------
 def add_alert():
 
