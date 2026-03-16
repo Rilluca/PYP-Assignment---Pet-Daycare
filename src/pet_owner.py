@@ -32,7 +32,7 @@ def check_alphabet_and_empty_string_or_purely_spaces(x):
 
 #define a function to convert an integer to a character based on a custom function
 def custom_chr(x):
-    #representing ASCII from idnex 332 to 126
+    #representing ASCII from index 332 to 126
     lookup = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
 
     #if the input num is within the valid range
@@ -113,7 +113,7 @@ def custom_strip(x):
     #initialize count at the beginning
     start = 0
     #initialize end counter at the last
-    end = custom_len(x) - 1
+    end = count_len(x) - 1
 
     # Remove leading spaces/newlines
     while start <= end and (x[start] == " " or x[start] == "\n"):
