@@ -29,7 +29,7 @@ Welcome to the Manage Bookings Menu, what would you like to do?
 
 def automatic_booking_id():
     try:
-        with open('booking.txt', 'r') as f:
+        with open('../data/booking.txt', 'r') as f:
             count = 0
             line = f.readline()
             while line != "":
@@ -38,8 +38,8 @@ def automatic_booking_id():
     except:
         count = 0
 
-    num = str(count + 1)
-    while len(num) < 6:
+    num = str(count+1)
+    while len(num) < 4:
         num = "0" + num
 
     booking_id = "BK" + num
@@ -53,6 +53,7 @@ def automatic_pet_id():
             while line != "":
                 count += 1
                 line = f.readline()
+
     except:
         count = 0
 
@@ -64,163 +65,192 @@ def automatic_pet_id():
     return pet_id
 
 def register_new_pet_owner():
-    is_alphabet = True
-    username = input("Enter username:")
-    user_password = input("Enter password:")
-    for c in username:
-        if not ((c >= "a" and c <= "z") or (c >= "A" and c <= "Z")):
-            is_alphabet = False
-            break
+    while True:
+        is_alphabet = True
+        username = input("Enter username:")
+        user_password = input("Enter password:")
 
-    if not is_alphabet:
-        return "Username can only contain alphabets"
+        for c in username:
+            if not ((c >= "a" and c <= "z") or (c >= "A" and c <= "Z")):
+                is_alphabet = False
+                break
 
-    if user_password == "":
-        return "Password cannot be empty"
+        if not is_alphabet:
+            print("Username can only contain alphabets\n")
+            continue
 
-    with open("../data/users.txt", "r") as file:
-        for line in file:
-            if line.strip().split(",")[0] == username:
-                print("Username is already taken.")
+        if user_password == "":
+            print("Password cannot be empty\n")
+            continue
 
-    # Open file in append mode to add in new users
-    with open("../data/users.txt", "a") as file:
-        file.write(f"{username},{user_password}\n")
-    return "Pet owner registered successfully"
+        with open("../data/users.txt", "r") as file:
+            for line in file:
+                if line.strip().split(",")[0] == username:
+                    print("Username is already taken.")
+                    break
+
+        # Open file in append mode to add in new users
+        with open("../data/users.txt", "a") as file:
+            file.write(username + "," + user_password + "\n")
+        return "Pet owner registered successfully"
 
 def register_new_pet():
-    username = input("Enter username:")
-    pet_name = input("Enter pet name:")
-    user_password = input("Enter password:")
+    while True:
+        username = input("Enter username:")
+        pet_name = input("Enter pet name:")
+        user_password = input("Enter password:")
 
-    is_alphabet = True
-    for c in username:
-        if not ((c >= "a" and c <= "z" ) or (c >= "A" and c <= "Z")):
-            is_alphabet = False
+        is_alphabet = True
+        for c in username:
+            if not ((c >= "a" and c <= "z" ) or (c >= "A" and c <= "Z")):
+                is_alphabet = False
+                break
+        if not is_alphabet:
+            print("Username can only contain alphabets\n")
+            continue
+
+        is_alphabet = True
+        for c in pet_name:
+            if not ((c >= "a" and c <= "z" ) or (c >= "A" and c <= "Z")):
+                is_alphabet = False
+                break
+        if not is_alphabet:
+            print("Pet name can only contain alphabets\n")
+            continue
+
+        if user_password == "":
+            print("Password cannot be empty\n")
+            continue
+
+        with open("../data/pet.txt", "a+") as file:
+            file.seek(0)
+            for line in file:
+                if line.strip().split(",")[0] == username:
+                    duplicate = True
+                    break
+            if duplicate:
+                print("Username is already taken.\n")
+                continue
+
+            pet_id = automatic_pet_id()
+            text = (username + "," + pet_id + "," + pet_name + "\n")
+            file.write(text)
+            print("Pet registered successfully.")
             break
-    if not is_alphabet:
-        return "Username can only contain alphabets"
-
-
-    is_alphabet = True
-    for c in pet_name:
-        if not ((c >= "a" and c <= "z" ) or (c >= "A" and c <= "Z")):
-            is_alphabet = False
-            break
-    if not is_alphabet:
-        return "Pet name can only contain alphabets"
-
-        #Open file in append mode to add in new users
-    with open("../data/pet.txt", "a+") as file:
-        file.seek(0)
-        for line in file:
-            if line.strip().split(",")[0] == username:
-                return "Username is already taken."
-
-        pet_id = automatic_pet_id()
-        file.write(username + "," + pet_id + "," + pet_name + "," + user_password + "\n")
-    return "Pet registered successfully."
 
 def add_new_booking():
     username = input("Please enter owner name:")
     pet_id = input("Please enter the pet_id:")
     date = input("Enter date to book (DD-MM-YYYY):")
+    service = input("Enter type of service:")
 
-    if username == "" or pet_id == "" or date == "":
+    if username == "" or pet_id == "" or date == "" or service == "":
         print("Every field must be filled")
+        return
+
+    # Check if pet ID exists
+    pet_exists = False
+    with open("../data/pet.txt", "r") as f:
+        for line in f:
+            parts = line.strip().split(",")
+            if parts[1] == pet_id:
+                pet_exists = True
+                break
+
+    if not pet_exists:
+        print("Pet ID doesn't exist")
         return
 
     booking_id = automatic_booking_id()
     print("Your Booking ID is:", booking_id)
+
     try:
-        with open("booking.txt", "a") as f:
-            text = booking_id + "," + username + "," + date + "," + pet_id + "\n"
+        with open("../data/booking.txt", "a") as f:
+            text = booking_id + "," + username + "," + date + "," + pet_id +  "," + service + "\n"
             f.write(text)
             print("Booking added successful")
     except Exception as e:
         print("Booking failed", e)
 
+
 def edit_existing_booking():
-    def edit_existing_booking():
-        pet_id = input("Enter Pet ID to edit booking: ")
+    booking_id = input("Enter Booking ID to edit booking: ")
 
-        file = open("booking.txt", "r")
+    with open("../data/booking.txt", "r") as file:
         lines = file.readlines()
-        file.close()
 
-        found = False
-        new_lines = []
+    found = False
+    new_lines = []
 
-        for line in lines:
-            data = line.strip().split(",")
+    for line in lines:
+        data = line.strip().split(",")
 
-            if data[0] == pet_id:
-                found = True
-                print("Current Booking:", line.strip())
+        if data[0] == booking_id:
+            found = True
+            print("Current Booking:", line.strip())
 
-                new_date = input("Enter new booking date: ")
-                new_service = input("Enter new service: ")
+            new_date = input("Enter new booking date: ")
+            new_service = input("Enter new service: ")
 
-                updated_line = pet_id + "," + new_date + "," + new_service + "\n"
-                new_lines.append(updated_line)
-            else:
-                new_lines.append(line)
-
-        if found:
-            file = open("booking.txt", "w")
-            file.writelines(new_lines)
-            file.close()
-            print("Booking updated successfully.")
+            updated_line = booking_id + "," + data[1] + "," + new_date + "," + data[3] + "," + new_service + "\n"
+            new_lines.append(updated_line)
         else:
-            print("Pet ID not found.")
+            new_lines.append(line)
+
+    if found:
+        with open("../data/booking.txt", "w") as file:
+            file.writelines(new_lines)
+        print("Booking updated successfully.")
+    else:
+        print("Booking ID not found.")
 
 def delete_booking():
-    pet_id = input("Please enter the pet_id: ").strip()
+    booking_id = input("Please enter the Booking ID: ").strip()
     result = False
 
     try:
-        with open("booking.txt", "r") as f:
+        with open("../data/booking.txt", "r") as f:
             lines = f.readlines()
 
         new_lines = []
 
         for line in lines:
             data = line.strip().split(",")
-            if data[0] != pet_id:
+            if data[0] != booking_id:
                 new_lines.append(line)
             else:
                 result = True
 
-        with open("booking.txt", "w") as f:
+        with open("../data/booking.txt", "w") as f:
             f.writelines(new_lines)
 
         if result:
             print("Booking deleted successfully.")
         else:
-            print("Pet ID not found.")
+            print("Booking ID not found.")
 
     except FileNotFoundError:
-        print("booking.txt file not found.")
+        print("File not found.")
 
 def view_bookings():
-    pet_id = input("Please enter the pet_id: ").strip()
+    booking_id = input("Please enter the Booking ID: ").strip()
     Result = False
 
     try:
-        with open("booking.txt", "r") as f:
-            print(f"\n--- Booking for {pet_id} ---")
+        with open("../data/booking.txt", "r") as f:
+            print(f"\n--- Booking for {booking_id} ---")
             for line in f:
                 # Clean the line and split by comma
                 parts = line.strip().split(",")
 
                 # Check if the list has enough data and matches exactly
                 # Assuming pet_id is index 0
-                if len(parts) > 0 and parts[0] == pet_id:
-                    print(f"Date: {parts[1]} | Service: {parts[2]} | Status: {parts[3]}")
+                if len(parts) > 0 and parts[0] == booking_id:
+                    print(f"Name: {parts[1]} | Date: {parts[2]} | Pet ID: {parts[3] } | Service: {parts[4]}")
                     Result = True
 
             if not Result:
-                print("No bookings found for this Pet ID.")
+                print("No bookings found for this Booking ID.")
 
     except FileNotFoundError:
         print("File not found")
@@ -230,7 +260,7 @@ def view_service_history():
     Result = False
 
     try:
-        with open("service_history.txt", "r") as f:
+        with open("../data/service_history.txt", "r") as f:
             print(f"\n--- Service History for {pet_id} ---")
             for line in f:
                 # Clean the line and split by comma
@@ -280,50 +310,44 @@ def check_input_3():
 
 
 def show_bookingOfficer_menu():
+    while True:
         # Print Booking Officer menu
         print(bookingOfficer_menu)
 
         # Create a loop for validating input
-        while True:
-            try:
-                # Ask officer for choice input
-                BO_input = int(input("Enter your choice: "))
+        try:
+            # Ask officer for choice input
+            BO_input = int(input("Enter your choice: "))
 
-                # Match case for menu selection
-                match BO_input:
-                    case 1:
-                        print("Register New Pet Owner(s) here")
-                        register_new_pet_owner()
-                        break
+            # Match case for menu selection
+            match BO_input:
+                case 1:
+                    print("Register New Pet Owner(s) here")
+                    print(register_new_pet_owner())
 
-                    case 2:
-                        print("Register New Pet(s) here")
-                        register_new_pet()
-                        break
+                case 2:
+                    print("Register New Pet(s) here")
+                    print(register_new_pet())
 
-                    case 3:
-                        print("Manage Bookings Menu here")
-                        print(manageBooking_menu)
-                        check_input_3()
-                        break
+                case 3:
+                    print("Manage Bookings Menu here")
+                    print(manageBooking_menu)
+                    check_input_3()
 
-                    case 4:
-                        print("View Bookings here")
-                        view_bookings()
-                        break
+                case 4:
+                    print("View Bookings here")
+                    view_bookings()
 
-                    case 5:
-                        print("View Service History here")
-                        view_service_history()
-                        break
+                case 5:
+                    print("View Service History here")
+                    view_service_history()
 
-                    case 6:
-                        print("Exiting menu now")
-                        break
+                case 6:
+                    print("Exiting menu now")
+                    break
 
-                    case _:
-                        print("Input can only be in number and within range, please try again\n")
+                case _:
+                    print("Input can only be in number and within range, please try again\n")
 
-            except Exception as e:
-                print(f"Error: {e}. Input can only be in number and within range, please try again\n")
-
+        except Exception as e:
+            print(f"Error: {e}. Input can only be in number and within range, please try again\n")

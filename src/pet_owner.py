@@ -32,7 +32,7 @@ def check_alphabet_and_empty_string_or_purely_spaces(x):
 
 #define a function to convert an integer to a character based on a custom function
 def custom_chr(x):
-    #representing ASCII from idnex 332 to 126
+    #representing ASCII from index 332 to 126
     lookup = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
 
     #if the input num is within the valid range
