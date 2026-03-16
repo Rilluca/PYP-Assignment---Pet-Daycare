@@ -1,3 +1,2 @@
 Haji,PT001,Coco
-Marcuz,PT002,Lily
-John,PT003,Lily
+Haji,PT002,Coca

@@ -2,5 +2,3 @@ HairCut,40
 Pet Taxi,250
 Grooming,60
 Day Care,50
-
-

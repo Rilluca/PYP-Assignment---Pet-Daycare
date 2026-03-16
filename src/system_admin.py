@@ -160,7 +160,7 @@ def sys_viewdata():
 
                                     # If pet belongs to current user, print info
                                     if pet_data[0] == credentials[0]:
-                                        print("Pet-", pet_data[2], "(", pet_data[1], ")", end="\n")
+                                        print("Pet-", pet_data[2], "(", pet_data[1], ")", end="\n\n")
                                         not_found = False
 
                                 # If no pets found for this user, print message
@@ -237,6 +237,7 @@ def sys_manage():
     2.Pet records
     3.Exit
         """)
+
 
         try:
             # Prompt user for input and convert to integer
@@ -368,10 +369,20 @@ def sys_service_option1():
                                 while True:
                                     service = input("Enter service name:")
                                     check_alpha = check_alphabet_and_empty_string_or_purely_spaces(service)
-                                    if check_alpha:
+                                    inlist = False
+                                    with open("../data/Service.txt", "r") as file:
+                                        service_list = file.readlines()  # read all user records
+                                        # Iterate through each user
+                                        for line in service_list:
+                                            services = manual_strip(line)  # remove extra spaces/newlines
+                                            services = manual_spilt(services, ",")  # split by comma
+                                            if services[0] == service:
+                                                inlist = True
+                                                break
+                                    if check_alpha and inlist==False:
                                         break
                                     else:
-                                        print("Enter a valid service (only alphabet)")
+                                        print("Enter a valid service that isn't already repeated or is alphabet")
 
                                 service_data[0] = service
                                 print("Service Name updated successfully.")
@@ -383,7 +394,7 @@ def sys_service_option1():
                                         payment = int(input("Enter price: "))
                                         payment = str(payment)
                                     except ValueError:
-                                        print("Enter valid price")
+                                        print("Ernter valid price")
                                     else:
                                         break
 
@@ -482,10 +493,19 @@ def sys_service_option2():
                         username = input("Enter username:")
                         # Validate that username contains only letters and spaces
                         check_alpha = check_alphabet_and_empty_string_or_purely_spaces(username)
-                        if check_alpha:
+                        inlist = False
+                        with open("../data/users.txt", "r") as file:
+                            credential_list = file.readlines()  # read all user records
+                            # Iterate through each user
+                            for line in credential_list:
+                                credentials = manual_strip(line)  # remove extra spaces/newlines
+                                credentials = manual_spilt(credentials, ",")  # split by comma
+                                if credentials[0] == username:
+                                    inlist = True
+                        if check_alpha and inlist:
                             break
                         else:
-                            print("Enter a valid name (only alphabet)")
+                            print("Enter a valid name that is in the user file and is alphabet")
 
                     while True:
                         pet = input("Enter pet name: ")
@@ -544,10 +564,19 @@ def sys_service_option2():
                                 while True:
                                     username = input("Enter username:")
                                     check_alpha = check_alphabet_and_empty_string_or_purely_spaces(username)
-                                    if check_alpha:
+                                    inlist = False
+                                    with open("../data/users.txt", "r") as file:
+                                        credential_list = file.readlines()  # read all user records
+                                    # Iterate through each user
+                                        for line in credential_list:
+                                            credentials = manual_strip(line)  # remove extra spaces/newlines
+                                            credentials = manual_spilt(credentials, ",")  # split by comma
+                                            if credentials[0]==username:
+                                                inlist=True
+                                    if check_alpha and inlist :
                                         break
                                     else:
-                                        print("Enter a valid name (only alphabet)")
+                                        print("Enter a valid name that is in the user file and is alphabet")
                                 pet_data[0] = username
 
                             else:
@@ -581,14 +610,11 @@ def sys_service_option2():
                     for line in pet_list:
                         pet_data = manual_strip(line)
                         pet_data = manual_spilt(pet_data, ",")
-
                         if pet_data[1] == PetID:
                             # Delete the line corresponding to the pet record
                             del pet_list[index]
                             found = True
                             break
-
-
                         index += 1
 
                     if found:
@@ -711,7 +737,6 @@ def show_sys_admin_menu():
 
                 case 1:
                     sys_viewdata()  # call function to view all data
-
                 case 2:
                     sys_manage()  # call function to manage pets/services
 
