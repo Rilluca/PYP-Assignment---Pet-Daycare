@@ -278,7 +278,7 @@ def select_pet():
 # Source: Bro Code, 2024, Write files using Python!, YouTube
 def add_care_records(pet_id, pet_name, care_type, status, date):
     # Format for care record
-    new_record = pet_id + "," + pet_name + "," + care_type + "," + status + "," + date + "\n"
+    new_record = pet_name + "," + pet_id + "," + care_type + "," + status + "," + date + "\n"
 
     # Read all lines in files
     with open("../data/care_records.txt", "r") as f:

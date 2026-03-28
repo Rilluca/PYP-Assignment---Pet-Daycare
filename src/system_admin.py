@@ -732,4 +732,3 @@ def show_sys_admin_menu():
             print("Invalid choice. Please try again.")# handle non-integer input
         except Exception:
             print("Unknown error occurred. Please try again.")#handle unexpected errors
-show_sys_admin_menu()
