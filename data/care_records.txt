@@ -2,4 +2,4 @@ Coco,PT001,Feeding,Pending,14/03/2026
 Cookie,PT002,Grooming,Done,14/03/2026
 Coco,PT001,Activities,In-progress,14/03/2026
 Cookie,PT002,Activities,In-progress,16/03/2026
-Coca,PT002,Grooming,In-progress,16/03/2026
+Coca,PT002,Grooming,In-progress,16/03/2026,this pet has allergy, cannot eat peanut butter
