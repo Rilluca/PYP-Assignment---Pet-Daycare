@@ -280,7 +280,7 @@ def view_service_history():
                 print("No records found for this Pet ID.")
 
     except FileNotFoundError:
-        print("abc")
+        print("File not found")
 
 def check_input_3():
     while True:
