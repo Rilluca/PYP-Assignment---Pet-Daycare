@@ -127,9 +127,11 @@ def custom_split(string):
     # To build each word by word
     word = ""
 
+    delimiter = [",", "#"]
+
     for c in string:
         # If current character is not the delimiter
-        if c not in ",":
+        if c not in delimiter:
             # Add current character to word if it's not a delimiter
             word += c
         else:
@@ -205,7 +207,7 @@ def validate_date():
             continue
 
         # Specific logic for month with 30 days
-        if (month in 4, 6, 9, 11) and day > 30:
+        if month in [4, 6, 9, 11] and day > 30:
             print("This month only has 30 days.\n")
             continue
 
@@ -221,7 +223,8 @@ def validate_date():
 
             # If it's not a leap year
             if not is_leap and day > 28:
-                print(f"{year} is not a leap year. February on leap year only has 28 days.")
+                print(f"{year} is not a leap year. February not on leap year only has 28 days.\n")
+                continue
 
         # Return to the input
         return date_input
@@ -271,13 +274,13 @@ def select_pet():
                 print("Number out of range, please try again.")
 
         except ValueError:
-            print("Invalid input, please try again.\n")
+            print("Invalid input, please try again.")
 
 # Function to add care records
 # Source: Bro Code, 2024, Write files using Python!, YouTube
 def add_care_records(pet_id, pet_name, care_type, status, date):
     # Format for care record
-    new_record = pet_id + "," + pet_name + "," + care_type + "," + status + "," + date + "\n"
+    new_record = pet_name + "," + pet_id + "," + care_type + "," + status + "," + date + "\n"
 
     # Read all lines in files
     with open("../data/care_records.txt", "r") as f:
@@ -362,7 +365,7 @@ def add_care_menu():
         except ValueError:
             print("Invalid input, please try again.\n")
 
-    date = validate_date(status)
+    date = validate_date()
 
     add_care_records(pet_id, pet_name, care_type, status, date)
 
@@ -426,6 +429,7 @@ def view_all_records():
             print("Invalid input, please try again.")
 
 # Function to update pet care status
+# Source: Coding With Sagar, 2024, Contact book app in Python | Python for beginners | #project11, YouTube
 def update_records():
     print('-' * 50)
     print("Update Existing Record")
@@ -449,10 +453,10 @@ def update_records():
                 selected_pet_data = custom_split(strip_selected_pet)
                 valid_choice = True
             else:
-                print("Number out of range, please try again.\n")
+                print("Number out of range, please try again.")
 
         except ValueError:
-            print("Invalid input, please try again.\n")
+            print("Invalid input, please try again.")
 
     valid_choice = False
     while not valid_choice:
@@ -473,7 +477,7 @@ def update_records():
                 case 3:
                     new_status = "Done"
                 case _:
-                    print("Invalid input, please try again.\n")
+                    print("Invalid input, please try again.")
                     continue
 
             if new_status == selected_pet_data[3]:
@@ -483,10 +487,10 @@ def update_records():
                 valid_choice = True
 
         except ValueError:
-            print("Invalid input, please try again.\n")
+            print("Invalid input, please try again.")
 
     # Pass the data to validate in validate_date() function
-    date = validate_date(selected_pet_data[4])
+    date = validate_date()
     selected_pet_data[4] = date
 
     updated_record_string = f"{selected_pet_data[1]},{selected_pet_data[0]},{selected_pet_data[2]},{selected_pet_data[3]},{selected_pet_data[4]}\n"
@@ -507,12 +511,13 @@ def update_records():
             update_records()
             valid_choice = True
         elif choice == 'n' or choice == 'N':
-            print("Exiting program now.")
+            show_pet_care_menu()
             valid_choice = True
         else:
             print("Invalid input, please try again.")
 
 # Function to remove an existing care record
+# Source: Coding With Sagar, 2024, Contact book app in Python | Python for beginners | #project11, YouTube
 def remove_records():
     print('-' * 50)
     print("Remove Existing Record")
@@ -551,17 +556,17 @@ def remove_records():
                         valid_choice = True
 
                     else:
-                        print("Invalid input, please enter 'y' or 'n'.\n")
+                        print("Invalid input, please enter 'y' or 'n'.")
             else:
                 print("Number out of range, please try again.")
 
         except ValueError:
-            print("Invalid input, please enter a number.\n")
+            print("Invalid input, please enter a number.")
 
     # Loop to ask user if they want to stay or go back
     valid_choice = False
     while not valid_choice:
-        choice = input("\nWould you like to remove another record? N will go back to previous menu. (y/n): ")
+        choice = input("Would you like to remove another record? N will go back to previous menu. (y/n): ")
 
         if choice == 'y' or choice == 'Y':
             remove_records()

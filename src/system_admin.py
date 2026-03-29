@@ -3,7 +3,7 @@
 # - View all data (owners, pets, bookings, payments).
 # - Generate overall service report (total bookings, revenue, available slots).
 from src.booking_officer import automatic_pet_id
-
+from src.pet_owner import grooming_slots
 def manual_lens(x):
     count = 0          # initialize counter
     # iterate through each element in the collection
@@ -160,7 +160,7 @@ def sys_viewdata():
 
                                     # If pet belongs to current user, print info
                                     if pet_data[0] == credentials[0]:
-                                        print("Pet-", pet_data[2], "(", pet_data[1], ")", end="\n")
+                                        print("Pet-", pet_data[2], "(", pet_data[1], ")", end="\n\n")
                                         not_found = False
 
                                 # If no pets found for this user, print message
@@ -191,7 +191,7 @@ def sys_viewdata():
                             booking_data = manual_spilt(booking_data, ",")
                             print("Booking ID-", booking_data[0], end="\n")
                             print("Username-", booking_data[1], end="\n")
-                            print("Date-", booking_data[2], end="\n\n")
+                            print("Date-", booking_data[3], end="\n\n")
 
                 case 4:
                     # Option 4: View payment/service history
@@ -204,7 +204,7 @@ def sys_viewdata():
                             payment_data = manual_spilt(payment_data, ",")
                             print("Username-", payment_data[1], end="\n")
                             print("Date-", payment_data[2], end="\n")
-                            print("Status-", payment_data[5], end="\n")
+                            print("Status-", payment_data[6], end="\n")
                             print("Payment- RM", payment_data[4], end="\n\n")
 
                 case 5:
@@ -237,6 +237,7 @@ def sys_manage():
     2.Pet records
     3.Exit
         """)
+
 
         try:
             # Prompt user for input and convert to integer
@@ -368,10 +369,20 @@ def sys_service_option1():
                                 while True:
                                     service = input("Enter service name:")
                                     check_alpha = check_alphabet_and_empty_string_or_purely_spaces(service)
-                                    if check_alpha:
+                                    inlist = False
+                                    with open("../data/Service.txt", "r") as file:
+                                        service_list = file.readlines()  # read all user records
+                                        # Iterate through each user
+                                        for line in service_list:
+                                            services = manual_strip(line)  # remove extra spaces/newlines
+                                            services = manual_spilt(services, ",")  # split by comma
+                                            if services[0] == service:
+                                                inlist = True
+                                                break
+                                    if check_alpha and inlist==False:
                                         break
                                     else:
-                                        print("Enter a valid service (only alphabet)")
+                                        print("Enter a valid service that isn't already repeated or is alphabet")
 
                                 service_data[0] = service
                                 print("Service Name updated successfully.")
@@ -383,7 +394,7 @@ def sys_service_option1():
                                         payment = int(input("Enter price: "))
                                         payment = str(payment)
                                     except ValueError:
-                                        print("Enter valid price")
+                                        print("Ernter valid price")
                                     else:
                                         break
 
@@ -482,10 +493,19 @@ def sys_service_option2():
                         username = input("Enter username:")
                         # Validate that username contains only letters and spaces
                         check_alpha = check_alphabet_and_empty_string_or_purely_spaces(username)
-                        if check_alpha:
+                        inlist = False
+                        with open("../data/users.txt", "r") as file:
+                            credential_list = file.readlines()  # read all user records
+                            # Iterate through each user
+                            for line in credential_list:
+                                credentials = manual_strip(line)  # remove extra spaces/newlines
+                                credentials = manual_spilt(credentials, ",")  # split by comma
+                                if credentials[0] == username:
+                                    inlist = True
+                        if check_alpha and inlist:
                             break
                         else:
-                            print("Enter a valid name (only alphabet)")
+                            print("Enter a valid name that is in the user file and is alphabet")
 
                     while True:
                         pet = input("Enter pet name: ")
@@ -544,10 +564,19 @@ def sys_service_option2():
                                 while True:
                                     username = input("Enter username:")
                                     check_alpha = check_alphabet_and_empty_string_or_purely_spaces(username)
-                                    if check_alpha:
+                                    inlist = False
+                                    with open("../data/users.txt", "r") as file:
+                                        credential_list = file.readlines()  # read all user records
+                                    # Iterate through each user
+                                        for line in credential_list:
+                                            credentials = manual_strip(line)  # remove extra spaces/newlines
+                                            credentials = manual_spilt(credentials, ",")  # split by comma
+                                            if credentials[0]==username:
+                                                inlist=True
+                                    if check_alpha and inlist :
                                         break
                                     else:
-                                        print("Enter a valid name (only alphabet)")
+                                        print("Enter a valid name that is in the user file and is alphabet")
                                 pet_data[0] = username
 
                             else:
@@ -581,14 +610,11 @@ def sys_service_option2():
                     for line in pet_list:
                         pet_data = manual_strip(line)
                         pet_data = manual_spilt(pet_data, ",")
-
                         if pet_data[1] == PetID:
                             # Delete the line corresponding to the pet record
                             del pet_list[index]
                             found = True
                             break
-
-
                         index += 1
 
                     if found:
@@ -641,34 +667,18 @@ def sys_summary():
             count=count+1  # increment counter for each line
             user_amount=count  # store total users
 
-    # open slots.txt to count used slots and calculate available slots
-    with open("../data/slots.txt", "r") as file:
-        count=0  # reset counter
-
-        for line in file:
-
-            count=count+1  # increment counter for each line
-            used_slot=count  # store used slots
-
-            # determine available slots
-            if used_slot<10:
-                available_slot=10-used_slot  # calculate remaining slots
-            elif used_slot==10:
-                available_slot="full"  # no slots left
-            else:
-                available_slot="Error"  # inconsistency
-
-        used_slot=count  # final used slot count
-
     # open service_history.txt to calculate total revenue
     with open("../data/service_history.txt", "r") as file:
         total=0  # initialize revenue total
-
         for line in file:
             data = manual_strip(line)  # remove whitespace/newlines
             data = manual_spilt(data, ",")  # split data by comma
-            price=data[4]  # get price from field
-            price=float(price)  # convert to float
+            if data[5]=="accept":
+                price=data[4]
+                price = float(price)# get price from field
+            else:
+                price=0
+                price=float(price)  # convert to float
             total=total+price  # accumulate total revenue
 
     # print system summary report
@@ -682,13 +692,8 @@ def sys_summary():
     Total Bookings: {booking_amount}
 
     Total Revenue: RM {total}
-    -----------
-    Slot info
-    -----------
-    Max slot=10
-    Taken slot={used_slot}
-    Available slot: {available_slot} 
     """)
+    grooming_slots()
 
 def show_sys_admin_menu():
 
@@ -711,7 +716,6 @@ def show_sys_admin_menu():
 
                 case 1:
                     sys_viewdata()  # call function to view all data
-
                 case 2:
                     sys_manage()  # call function to manage pets/services
 
@@ -725,7 +729,6 @@ def show_sys_admin_menu():
                     print("Enter a valid option")  # invalid menu option
 
         except ValueError:
-            print("Invalid choice. Please try again.")  # handle non-integer input
-
+            print("Invalid choice. Please try again.")# handle non-integer input
         except Exception:
-            print("Unknown error occured. Please try again.")  # handle unexpected errors
+            print("Unknown error occurred. Please try again.")#handle unexpected errors
