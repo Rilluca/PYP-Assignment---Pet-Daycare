@@ -2,3 +2,4 @@ Marcuz,PT001,Lily
 John,PT002,Lily
 Hugo,PT003,Rudolph
 Rillu,PT004,Cookie
+Hajime,PT005,Gogo
