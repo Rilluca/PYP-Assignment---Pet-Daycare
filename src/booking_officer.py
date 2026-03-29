@@ -27,8 +27,10 @@ Welcome to the Manage Bookings Menu, what would you like to do?
 4. Return
 """
 
+#Function to automatically generate booking
 def automatic_booking_id():
     try:
+        #Open file in read mode
         with open('../data/booking.txt', 'r') as f:
             count = 0
             line = f.readline()
@@ -124,6 +126,7 @@ def register_new_pet():
 
         with open("../data/pet.txt", "a+") as file:
             file.seek(0)
+            duplicate = False
             for line in file:
                 if line.strip().split(",")[0] == username:
                     duplicate = True
@@ -137,6 +140,7 @@ def register_new_pet():
             file.write(text)
             print("Pet registered successfully.")
             break
+
 
 def add_new_booking():
     username = input("Please enter owner name:")
@@ -327,7 +331,7 @@ def show_bookingOfficer_menu():
 
                 case 2:
                     print("Register New Pet(s) here")
-                    print(register_new_pet())
+                    register_new_pet()
 
                 case 3:
                     print("Manage Bookings Menu here")
