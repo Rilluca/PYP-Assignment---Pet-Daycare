@@ -94,7 +94,7 @@ def show_admin_menu():
 
 # Credentials for admin login
 admin_username = "admin"
-admin_password = "123"
+admin_password = "123" 
 
 # Function to verify and authorize login
 # Source: Max O'Didily, 2023, Simple user login system using Python, YouTube
