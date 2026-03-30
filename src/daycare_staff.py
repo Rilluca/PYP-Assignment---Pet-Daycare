@@ -127,11 +127,9 @@ def custom_split(string):
     # To build each word by word
     word = ""
 
-    delimiter = [",", "#"]
-
     for c in string:
         # If current character is not the delimiter
-        if c not in delimiter:
+        if c not in ",":
             # Add current character to word if it's not a delimiter
             word += c
         else:
