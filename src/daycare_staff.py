@@ -268,7 +268,7 @@ def select_pet():
                 valid_choice = True
 
                 # Return back pet name and pet ID because that's what we only need now
-                return selected_pet_data[2], selected_pet_data[1]
+                return selected_pet_data[1], selected_pet_data[2]
 
             else:
                 print("Number out of range, please try again.")
@@ -278,7 +278,7 @@ def select_pet():
 
 # Function to add care records
 # Source: Bro Code, 2024, Write files using Python!, YouTube
-def add_care_records(pet_id, pet_name, care_type, status, date):
+def add_care_records(pet_name, pet_id, care_type, status, date):
     # Format for care record
     new_record = pet_name + "," + pet_id + "," + care_type + "," + status + "," + date + "\n"
 
@@ -367,7 +367,7 @@ def add_care_menu():
 
     date = validate_date()
 
-    add_care_records(pet_id, pet_name, care_type, status, date)
+    add_care_records(pet_name, pet_id, care_type, status, date)
 
     print("Log added successfully!\n")
 
@@ -493,7 +493,7 @@ def update_records():
     date = validate_date()
     selected_pet_data[4] = date
 
-    updated_record_string = f"{selected_pet_data[1]},{selected_pet_data[0]},{selected_pet_data[2]},{selected_pet_data[3]},{selected_pet_data[4]}\n"
+    updated_record_string = f"{selected_pet_data[0]},{selected_pet_data[1]},{selected_pet_data[2]},{selected_pet_data[3]},{selected_pet_data[4]}\n"
 
     record_list[choice - 1] = updated_record_string
 
