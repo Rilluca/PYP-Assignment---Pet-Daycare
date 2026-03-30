@@ -532,18 +532,23 @@ def remove_records():
         try:
             choice = int(input("\nChoose a record that you would like to remove: "))
 
+            # Check if choice is within range
             if 1 <= choice <= len(record_list):
                 valid_confirm = False
 
+                # Double confirmation to prevent accidental deletion
                 while not valid_confirm:
                     confirm = input(f"Are you sure you want to delete record {choice}? (y/n): ")
 
                     if confirm == 'y' or confirm == 'Y':
+                        # Slicing to remove record by replacing them as empty list
                         record_list[choice - 1: choice] = []
 
+                        # Write the empty list back into the txt file
                         with open("../data/care_records.txt", "w") as f:
                             for record in record_list:
                                 f.write(record)
+
                         print("\nRecord removed successfully!")
                         valid_confirm = True
                         valid_choice = True
