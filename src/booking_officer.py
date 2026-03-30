@@ -3,6 +3,7 @@
 # - Process daycare and grooming bookings (reserve, cancel, reschedule).
 # - View current bookings and pet service history.
 
+#Menu display for Booking Officer
 bookingOfficer_menu = f"""
 {'-' * 50}
 Booking Officer Menu
@@ -16,6 +17,7 @@ Welcome Booking Officer, select your option:
 6. Quit
 """
 
+#Menu display for managing bookings
 manageBooking_menu = f"""
 {'-' * 50}
 Manage Bookings Menu
@@ -27,7 +29,7 @@ Welcome to the Manage Bookings Menu, what would you like to do?
 4. Return
 """
 
-#Function to automatically generate booking
+#Function to automatically generate booking ID
 def automatic_booking_id():
     try:
         #Open file in read mode
@@ -47,31 +49,37 @@ def automatic_booking_id():
     booking_id = "BK" + num
     return booking_id
 
+#Function to automatically generate pet ID
 def automatic_pet_id():
     try:
         with open('../data/pet.txt', 'r') as f:
             count = 0
             line = f.readline()
+            #Count number of pets
             while line != "":
                 count += 1
                 line = f.readline()
 
     except:
         count = 0
-
+    #Generetae next pet number
     num = str(count + 1)
+    #Add leading zeros
     while len(num) < 3:
         num = "0" + num
 
     pet_id = "PT" + num
     return pet_id
 
+#Function to register a new pet owner
 def register_new_pet_owner():
     while True:
         is_alphabet = True
+        #Get user input
         username = input("Enter username:")
         user_password = input("Enter password:")
 
+        #Check if username contains only letters
         for c in username:
             if not ((c >= "a" and c <= "z") or (c >= "A" and c <= "Z")):
                 is_alphabet = False
@@ -81,10 +89,12 @@ def register_new_pet_owner():
             print("Username can only contain alphabets\n")
             continue
 
+        #Check if password is empty
         if user_password == "":
             print("Password cannot be empty\n")
             continue
 
+        #Check if username already exists
         with open("../data/users.txt", "r") as file:
             for line in file:
                 if line.strip().split(",")[0] == username:
@@ -96,12 +106,15 @@ def register_new_pet_owner():
             file.write(username + "," + user_password + "\n")
         return "Pet owner registered successfully"
 
+#Function to register a new pet
 def register_new_pet():
     while True:
+        #Get inputs
         username = input("Enter username:")
         pet_name = input("Enter pet name:")
         user_password = input("Enter password:")
 
+        #Validate username
         is_alphabet = True
         for c in username:
             if not ((c >= "a" and c <= "z" ) or (c >= "A" and c <= "Z")):
@@ -111,6 +124,7 @@ def register_new_pet():
             print("Username can only contain alphabets\n")
             continue
 
+        #Validate pet name
         is_alphabet = True
         for c in pet_name:
             if not ((c >= "a" and c <= "z" ) or (c >= "A" and c <= "Z")):
@@ -120,13 +134,16 @@ def register_new_pet():
             print("Pet name can only contain alphabets\n")
             continue
 
+        #Check if password is empty
         if user_password == "":
             print("Password cannot be empty\n")
             continue
 
+        #Open pet file
         with open("../data/pet.txt", "a+") as file:
             file.seek(0)
             duplicate = False
+            #Check if username already has a pet
             for line in file:
                 if line.strip().split(",")[0] == username:
                     duplicate = True
@@ -135,19 +152,22 @@ def register_new_pet():
                 print("Username is already taken.\n")
                 continue
 
+            #Generate pet ID and save data
             pet_id = automatic_pet_id()
             text = (username + "," + pet_id + "," + pet_name + "\n")
             file.write(text)
             print("Pet registered successfully.")
             break
 
-
+#Function to add a new booking
 def add_new_booking():
+    #Get booking details
     username = input("Please enter owner name:")
     pet_id = input("Please enter the pet_id:")
     date = input("Enter date to book (DD-MM-YYYY):")
     service = input("Enter type of service:")
 
+    #Ensure all fields are filled
     if username == "" or pet_id == "" or date == "" or service == "":
         print("Every field must be filled")
         return
@@ -165,10 +185,12 @@ def add_new_booking():
         print("Pet ID doesn't exist")
         return
 
+    #Generate booking ID
     booking_id = automatic_booking_id()
     print("Your Booking ID is:", booking_id)
 
     try:
+        #Save booking to file
         with open("../data/booking.txt", "a") as f:
             text = booking_id + "," + username + "," + date + "," + pet_id +  "," + service + "\n"
             f.write(text)
@@ -176,16 +198,18 @@ def add_new_booking():
     except Exception as e:
         print("Booking failed", e)
 
-
+#Function to edit an existing booking
 def edit_existing_booking():
     booking_id = input("Enter Booking ID to edit booking: ")
 
+    #Read all bookings
     with open("../data/booking.txt", "r") as file:
         lines = file.readlines()
 
     found = False
     new_lines = []
 
+    #Loop through bookings
     for line in lines:
         data = line.strip().split(",")
 
@@ -193,14 +217,17 @@ def edit_existing_booking():
             found = True
             print("Current Booking:", line.strip())
 
+            #Get new values
             new_date = input("Enter new booking date: ")
             new_service = input("Enter new service: ")
 
+            #Update booking
             updated_line = booking_id + "," + data[1] + "," + new_date + "," + data[3] + "," + new_service + "\n"
             new_lines.append(updated_line)
         else:
             new_lines.append(line)
 
+    #Write updated data back to file
     if found:
         with open("../data/booking.txt", "w") as file:
             file.writelines(new_lines)
@@ -208,6 +235,7 @@ def edit_existing_booking():
     else:
         print("Booking ID not found.")
 
+#Function to delete a booking
 def delete_booking():
     booking_id = input("Please enter the Booking ID: ").strip()
     result = False
@@ -218,6 +246,7 @@ def delete_booking():
 
         new_lines = []
 
+        #Remove matching booking
         for line in lines:
             data = line.strip().split(",")
             if data[0] != booking_id:
@@ -225,6 +254,7 @@ def delete_booking():
             else:
                 result = True
 
+        #Save updated list
         with open("../data/booking.txt", "w") as f:
             f.writelines(new_lines)
 
@@ -236,6 +266,7 @@ def delete_booking():
     except FileNotFoundError:
         print("File not found.")
 
+#Function to view booking details
 def view_bookings():
     booking_id = input("Please enter the Booking ID: ").strip()
     Result = False
@@ -248,7 +279,7 @@ def view_bookings():
                 parts = line.strip().split(",")
 
                 # Check if the list has enough data and matches exactly
-                # Assuming pet_id is index 0
+                # Assuming booking_id is index 0
                 if len(parts) > 0 and parts[0] == booking_id:
                     print(f"Name: {parts[1]} | Date: {parts[2]} | Pet ID: {parts[3] } | Service: {parts[4]}")
                     Result = True
@@ -259,6 +290,7 @@ def view_bookings():
     except FileNotFoundError:
         print("File not found")
 
+#Function to view service history of pet
 def view_service_history():
     pet_id = input("Please enter the pet_id: ").strip()
     Result = False
@@ -282,6 +314,7 @@ def view_service_history():
     except FileNotFoundError:
         print("File not found")
 
+#Function to handle Manage Booking Menu input
 def check_input_3():
     while True:
         try:
@@ -312,7 +345,7 @@ def check_input_3():
         except Exception as e:
             print(f"Error: {e}. Input can only be in number and within range, please try again\n")
 
-
+#Main menu function
 def show_bookingOfficer_menu():
     while True:
         # Print Booking Officer menu
